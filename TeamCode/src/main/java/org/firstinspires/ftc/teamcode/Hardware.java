@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Hardware {
 
     public MotorEx driveLeftFront, driveRightFront, driveLeftRear, driveRightRear;
-    public Servo liftServo0;
+    public Servo liftServo0, liftServo2;
 
     public Hardware(HardwareMap hardwareMap) {
         driveLeftFront = new MotorEx(hardwareMap, "driveLeftFront", Motor.GoBILDA.RPM_312);
@@ -17,6 +17,10 @@ public class Hardware {
         driveRightRear = new MotorEx(hardwareMap, "driveRightRear", Motor.GoBILDA.RPM_312);
 
         liftServo0 = hardwareMap.get(Servo.class, "servo0");
+        liftServo2 = hardwareMap.get(Servo.class, "servo2");
+
+        liftServo0.setDirection(Servo.Direction.REVERSE);
+
 
     }
 }

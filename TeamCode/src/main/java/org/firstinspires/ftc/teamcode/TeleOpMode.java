@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -28,9 +29,20 @@ public class TeleOpMode extends OpMode {
     @Override
     public void loop() {
         mecanumDrive.driveRobotCentric(
-            gamepad.getLeftX(),
-            gamepad.getLeftY(),
-            gamepad.getRightY()
+            -gamepad.getLeftX(),
+            -gamepad.getLeftY(),
+            -gamepad.getRightX(),
+                true
         );
+
+        if(gamepad.getButton(GamepadKeys.Button.DPAD_DOWN)) {
+            hardware.liftServo0.setPosition(0);
+            hardware.liftServo2.setPosition(0);
+        }
+
+        if(gamepad.getButton(GamepadKeys.Button.DPAD_UP)) {
+            hardware.liftServo0.setPosition(1);
+            hardware.liftServo2.setPosition(1);
+        }
     }
 }
