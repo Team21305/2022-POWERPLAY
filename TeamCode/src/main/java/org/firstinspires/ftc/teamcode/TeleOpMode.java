@@ -1,48 +1,59 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.button.Button;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.DefaultDrive;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubSystem;
+import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
+
 @TeleOp
-public class TeleOpMode extends OpMode {
-    private Hardware hardware;
-    private MecanumDrive mecanumDrive;
+public class TeleOpMode extends CommandOpMode {
     private GamepadEx gamepad;
 
-    @Override
-    public void init() {
-        hardware = new Hardware(hardwareMap);
+    private DriveSubsystem driveSubsystem;
+    private LiftSubsystem liftSubsystem;
+    private IntakeSubSystem intakeSubsystem;
+    private Button downButton;
+    private Button upButton;
+    private Button openButton;
+    private Button closeButton;
 
-        mecanumDrive = new MecanumDrive(
-            hardware.driveLeftFront,
-            hardware.driveRightFront,
-            hardware.driveLeftRear,
-            hardware.driveRightRear
-        );
+    @Override
+    public void initialize() {
+        Hardware hardware = new Hardware(hardwareMap);
+        driveSubsystem = new DriveSubsystem(hardware, telemetry);
+        liftSubsystem = new LiftSubsystem(hardware, telemetry);
+        intakeSubsystem = new IntakeSubSystem(hardware, telemetry);
 
         gamepad = new GamepadEx(gamepad1);
-    }
 
-    @Override
-    public void loop() {
-        mecanumDrive.driveRobotCentric(
-            -gamepad.getLeftX(),
-            -gamepad.getLeftY(),
-            -gamepad.getRightX(),
-                true
-        );
+        downButton = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_DOWN))
+                .whenPressed(new InstantCommand(()->liftSubsystem.goToBottom()));
 
-        if(gamepad.getButton(GamepadKeys.Button.DPAD_DOWN)) {
-            hardware.liftServo0.setPosition(0);
-            hardware.liftServo2.setPosition(0);
-        }
+        upButton = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP))
+                .whenPressed(new InstantCommand(()->liftSubsystem.goToTop()));
 
-        if(gamepad.getButton(GamepadKeys.Button.DPAD_UP)) {
-            hardware.liftServo0.setPosition(1);
-            hardware.liftServo2.setPosition(1);
-        }
+        openButton = (new GamepadButton(gamepad, GamepadKeys.Button.Y))
+                .whenPressed(new InstantCommand(()->intakeSubsystem.open()));
+
+        closeButton = (new GamepadButton(gamepad, GamepadKeys.Button.A))
+                .whenPressed(new InstantCommand(()->intakeSubsystem.close()));
+
+        register(driveSubsystem, liftSubsystem, intakeSubsystem);
+        driveSubsystem.setDefaultCommand(new DefaultDrive(
+                driveSubsystem,
+                () -> gamepad.getLeftY(),
+                () -> gamepad.getLeftX(),
+                () -> gamepad.getRightX()));
     }
 }
+
+
