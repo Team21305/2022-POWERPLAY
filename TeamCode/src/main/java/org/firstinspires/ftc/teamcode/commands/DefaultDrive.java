@@ -34,7 +34,7 @@ public class DefaultDrive extends CommandBase {
 
     @Override
     public void execute() {
-        driveSubsysem.drive(-m_forward.getAsDouble()*0.75, -m_strafe.getAsDouble()*0.75, -m_rotation.getAsDouble()*0.75);
+        driveSubsysem.drive(m_forward.getAsDouble()*0.75, m_strafe.getAsDouble()*0.75, m_rotation.getAsDouble()*0.75);
     }
 
 }
