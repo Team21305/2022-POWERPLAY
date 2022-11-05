@@ -22,6 +22,7 @@ public class  DriveSubsystem extends SubsystemBase {
     private final Motor.Encoder rearrightencoder;
     private final BNO055IMU imu;
 
+   private Orientation angle;
 
     public DriveSubsystem(Hardware hardware, Telemetry telemetry){
         imu = hardware.imu;
@@ -56,8 +57,10 @@ public class  DriveSubsystem extends SubsystemBase {
     }
 
     public void drive(double y, double x, double r){
-        mecanumDrive.driveRobotCentric(x, y, r,true);
+       // mecanumDrive.driveRobotCentric(x, y, r,true);
+        mecanumDrive.driveFieldCentric(x, y, r, angle.firstAngle, true);
     }
+
 
     public void readEncoders(){
 
@@ -76,7 +79,7 @@ public class  DriveSubsystem extends SubsystemBase {
     }
 
     public void readGyro (){
-        Orientation angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         telemetry.addData( "gyro", angle.firstAngle);
     }
 
