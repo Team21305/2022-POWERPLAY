@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
-import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.acmerobotics.dashboard.FtcDashboard;
 
 import org.firstinspires.ftc.teamcode.commands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -28,6 +29,9 @@ public class TeleOpMode extends CommandOpMode {
 
     @Override
     public void initialize() {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+
         Hardware hardware = new Hardware(hardwareMap);
         driveSubsystem = new DriveSubsystem(hardware, telemetry);
         liftSubsystem = new LiftSubsystem(hardware, telemetry);

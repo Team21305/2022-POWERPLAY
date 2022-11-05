@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -22,7 +23,9 @@ public class  DriveSubsystem extends SubsystemBase {
     private final Motor.Encoder rearrightencoder;
     private final BNO055IMU imu;
 
-   private Orientation angle;
+    private Orientation angle;
+
+    public static double kp = 1.2;
 
     public DriveSubsystem(Hardware hardware, Telemetry telemetry){
         imu = hardware.imu;
@@ -39,7 +42,6 @@ public class  DriveSubsystem extends SubsystemBase {
         hardware.driveLeftRear.setRunMode(Motor.RunMode.VelocityControl);
         hardware.driveRightRear.setRunMode(Motor.RunMode.VelocityControl);
 
-        double kp=1.2;
         hardware.driveLeftFront.setVeloCoefficients(kp, 0,0);
         hardware.driveRightFront.setVeloCoefficients(kp, 0, 0);
         hardware.driveLeftRear.setVeloCoefficients(kp, 0, 0);
