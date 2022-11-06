@@ -66,8 +66,8 @@ public class  DriveSubsystem extends SubsystemBase {
 
     public void drive(double y, double x, double r){
 
-        mecanumDrive.driveRobotCentric(x, y, r,true);
-        //mecanumDrive.driveFieldCentric(x, y, r, angle.firstAngle, true);
+        //mecanumDrive.driveRobotCentric(x, y, r,true);
+        mecanumDrive.driveFieldCentric(x, y, r, angle.firstAngle, true);
 
         telemetry.addData("y",y);
         telemetry.addData("x",x);
@@ -102,7 +102,7 @@ public class  DriveSubsystem extends SubsystemBase {
         super.periodic();
 
         readEncoders();
-        //readGyro();
+        readGyro();
 
 
         telemetry.update();
