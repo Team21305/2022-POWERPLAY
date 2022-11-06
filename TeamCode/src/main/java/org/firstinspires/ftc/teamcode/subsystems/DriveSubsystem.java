@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.Hardware;
 public class  DriveSubsystem extends SubsystemBase {
 
     private final MecanumDrive mecanumDrive;
+    @androidx.annotation.NonNull
+    private final Hardware hardware;
     private final Telemetry telemetry;
     private final Motor.Encoder frontleftencoder;
     private final Motor.Encoder frontrightencoder;
@@ -26,9 +28,11 @@ public class  DriveSubsystem extends SubsystemBase {
     private Orientation angle;
 
     public static double kp = 1.2;
+    public static Motor.RunMode runMode=Motor.RunMode.RawPower;
 
     public DriveSubsystem(Hardware hardware, Telemetry telemetry){
         imu = hardware.imu;
+        this.hardware = hardware;
 
         this.telemetry = telemetry;
 
@@ -37,15 +41,17 @@ public class  DriveSubsystem extends SubsystemBase {
         rearleftencoder = hardware.driveLeftRear.encoder;
         rearrightencoder = hardware.driveRightRear.encoder;
 
-        hardware.driveLeftFront.setRunMode(Motor.RunMode.VelocityControl);
-        hardware.driveRightFront.setRunMode(Motor.RunMode.VelocityControl);
-        hardware.driveLeftRear.setRunMode(Motor.RunMode.VelocityControl);
-        hardware.driveRightRear.setRunMode(Motor.RunMode.VelocityControl);
+        hardware.driveLeftFront.setRunMode(runMode);
+        hardware.driveRightFront.setRunMode(runMode);
+        hardware.driveLeftRear.setRunMode(runMode);
+        hardware.driveRightRear.setRunMode(runMode);
 
-        hardware.driveLeftFront.setVeloCoefficients(kp, 0,0);
-        hardware.driveRightFront.setVeloCoefficients(kp, 0, 0);
-        hardware.driveLeftRear.setVeloCoefficients(kp, 0, 0);
-        hardware.driveRightRear.setVeloCoefficients(kp, 0, 0);
+        hardware.driveRightFront.setFeedforwardCoefficients(0,0,0);
+
+//        hardware.driveLeftFront.setVeloCoefficients(kp, 0,0);
+//        hardware.driveRightFront.setVeloCoefficients(kp, 0, 0);
+//        hardware.driveLeftRear.setVeloCoefficients(kp, 0, 0);
+//        hardware.driveRightRear.setVeloCoefficients(kp, 0, 0);
 
         mecanumDrive = new MecanumDrive(
                 hardware.driveLeftFront,
@@ -59,17 +65,22 @@ public class  DriveSubsystem extends SubsystemBase {
     }
 
     public void drive(double y, double x, double r){
-       // mecanumDrive.driveRobotCentric(x, y, r,true);
-        mecanumDrive.driveFieldCentric(x, y, r, angle.firstAngle, true);
+
+        mecanumDrive.driveRobotCentric(x, y, r,true);
+        //mecanumDrive.driveFieldCentric(x, y, r, angle.firstAngle, true);
+
+        telemetry.addData("y",y);
+        telemetry.addData("x",x);
+        telemetry.addData("r",r);
     }
 
 
     public void readEncoders(){
 
-        double fle = frontleftencoder.getRevolutions();
-        double fre = frontrightencoder.getRevolutions();
-        double rle = rearleftencoder.getRevolutions();
-        double rre = rearrightencoder.getRevolutions();
+        double fle = frontleftencoder.getCorrectedVelocity();
+        double fre = frontrightencoder.getCorrectedVelocity();
+        double rle = rearleftencoder.getCorrectedVelocity();
+        double rre = rearrightencoder.getCorrectedVelocity();
 
         telemetry.addData("fle", fle);
         telemetry.addData("fre", fre);
@@ -91,7 +102,7 @@ public class  DriveSubsystem extends SubsystemBase {
         super.periodic();
 
         readEncoders();
-        readGyro();
+        //readGyro();
 
 
         telemetry.update();

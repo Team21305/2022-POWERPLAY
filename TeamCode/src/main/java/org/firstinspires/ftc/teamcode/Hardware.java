@@ -28,7 +28,7 @@ public class Hardware {
         liftServo0 = hardwareMap.get(Servo.class, "servo0");
         liftServo2 = hardwareMap.get(Servo.class, "servo2");
 
-        liftServo0.setDirection(Servo.Direction.REVERSE);
+        liftServo2.setDirection(Servo.Direction.REVERSE);
 
         liftServo4 = hardwareMap.get(Servo.class, "servo4");
         liftServo5 = hardwareMap.get(Servo.class, "servo5");

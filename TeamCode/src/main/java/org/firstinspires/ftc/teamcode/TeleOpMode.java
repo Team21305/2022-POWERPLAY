@@ -26,15 +26,19 @@ public class TeleOpMode extends CommandOpMode {
     private Button upButton;
     private Button openButton;
     private Button closeButton;
+    private Button middleButton;
+    private Button groundButton;
+    private Button lowButton;
 
     @Override
     public void initialize() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
-        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        MultipleTelemetry multipleTelemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        telemetry = multipleTelemetry;
 
         Hardware hardware = new Hardware(hardwareMap);
         driveSubsystem = new DriveSubsystem(hardware, telemetry);
-        liftSubsystem = new LiftSubsystem(hardware, telemetry);
+        liftSubsystem = new LiftSubsystem(hardware, multipleTelemetry);
         intakeSubsystem = new IntakeSubSystem(hardware, telemetry);
 
         gamepad = new GamepadEx(gamepad1);
@@ -44,6 +48,15 @@ public class TeleOpMode extends CommandOpMode {
 
         upButton = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP))
                 .whenPressed(new InstantCommand(()->liftSubsystem.goToTop()));
+
+        middleButton = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_LEFT))
+                .whenPressed(new InstantCommand(()->liftSubsystem.goToMiddle()));
+
+        groundButton = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_RIGHT))
+                .whenPressed(new InstantCommand(()->liftSubsystem.goToGround()));
+
+        lowButton = (new GamepadButton(gamepad, GamepadKeys.Button.X))
+                .whenPressed(new InstantCommand(()->liftSubsystem.goToLow()));
 
         openButton = (new GamepadButton(gamepad, GamepadKeys.Button.Y))
                 .whenPressed(new InstantCommand(()->intakeSubsystem.open()));
