@@ -20,9 +20,11 @@ public class Hardware {
         driveRightRear = new MotorEx(hardwareMap, "driveRightRear", Motor.GoBILDA.RPM_312);
 
         driveLeftFront.setInverted(true);
-        driveRightFront.setInverted(true);
         driveLeftRear.setInverted(true);
+        driveRightFront.setInverted(true);
         driveRightRear.setInverted(true);
+        //driveRightFront.encoder.setDirection(Motor.Direction.REVERSE);
+        //driveRightRear.encoder.setDirection(Motor.Direction.REVERSE);
 
 
         liftServo0 = hardwareMap.get(Servo.class, "servo0");

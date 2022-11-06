@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,9 +10,9 @@ public class IntakeSubSystem extends SubsystemBase {
 
 
     private final Hardware hardware;
-    private final Telemetry telemetry;
+    private final MultipleTelemetry telemetry;
 
-    public IntakeSubSystem(Hardware hardware, Telemetry telemetry) {
+    public IntakeSubSystem(Hardware hardware, MultipleTelemetry telemetry) {
 
         this.hardware = hardware;
         this.telemetry = telemetry;

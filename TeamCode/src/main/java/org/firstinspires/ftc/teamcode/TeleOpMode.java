@@ -37,9 +37,9 @@ public class TeleOpMode extends CommandOpMode {
         telemetry = multipleTelemetry;
 
         Hardware hardware = new Hardware(hardwareMap);
-        driveSubsystem = new DriveSubsystem(hardware, telemetry);
+        driveSubsystem = new DriveSubsystem(hardware, multipleTelemetry);
         liftSubsystem = new LiftSubsystem(hardware, multipleTelemetry);
-        intakeSubsystem = new IntakeSubSystem(hardware, telemetry);
+        intakeSubsystem = new IntakeSubSystem(hardware, multipleTelemetry);
 
         gamepad = new GamepadEx(gamepad1);
 
