@@ -59,7 +59,9 @@ public class TeleOpMode extends CommandOpMode {
                 .whenPressed(new InstantCommand(()->liftSubsystem.goToLow()));
 
         openButton = (new GamepadButton(gamepad, GamepadKeys.Button.Y))
-                .whenPressed(new InstantCommand(()->intakeSubsystem.open()));
+                .whenPressed(new InstantCommand(()->intakeSubsystem.open())
+                        .andThen(new InstantCommand(()->liftSubsystem.goToBottom()))
+                );
 
         closeButton = (new GamepadButton(gamepad, GamepadKeys.Button.A))
                 .whenPressed(new InstantCommand(()->intakeSubsystem.close()));
