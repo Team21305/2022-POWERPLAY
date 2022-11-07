@@ -4,9 +4,13 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
+import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -24,21 +28,21 @@ public class  DriveSubsystem extends SubsystemBase {
     private final Hardware hardware;
     private final Telemetry telemetry;
     private final BNO055IMU imu;
+    private final MecanumDriveOdometry odometry;
 
-    private Orientation angle;
+    private double angle;
 
     public static double kp = 1.0;
     public static double ki = 0.0000;
 
     public static boolean squareInputs = true;
-    public static boolean isFieldCentric = false;
+    public static boolean isFieldCentric = true;
 
     public static Motor.RunMode runMode=Motor.RunMode.VelocityControl;
 
     public DriveSubsystem(Hardware hardware, MultipleTelemetry telemetry){
         imu = hardware.imu;
         this.hardware = hardware;
-
         this.telemetry = telemetry;
 
         hardware.driveLeftFront.setRunMode(runMode);
@@ -46,6 +50,31 @@ public class  DriveSubsystem extends SubsystemBase {
         hardware.driveRightFront.setRunMode(runMode);
         hardware.driveRightRear.setRunMode(runMode);
 
+        // Locations of the wheels relative to the robot center.
+        Translation2d m_frontLeftLocation =
+                new Translation2d(0.381, 0.381);
+        Translation2d m_frontRightLocation =
+                new Translation2d(0.381, -0.381);
+        Translation2d m_backLeftLocation =
+                new Translation2d(-0.381, 0.381);
+        Translation2d m_backRightLocation =
+                new Translation2d(-0.381, -0.381);
+
+        // Creating my kinematics object using the wheel locations.
+        MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics
+                (
+                        m_frontLeftLocation, m_frontRightLocation,
+                        m_backLeftLocation, m_backRightLocation
+                );
+
+        // Creating my odometry object from the kinematics object. Here,
+        // our starting pose is 5 meters along the long end of the field and in the
+        // center of the field along the short end, facing forward.
+        odometry = new MecanumDriveOdometry
+        (
+            m_kinematics, getGyroHeading(),
+            new Pose2d(0, 0, new Rotation2d())
+        );
 
         mecanumDrive = new MecanumDrive(
         false,
@@ -72,7 +101,7 @@ public class  DriveSubsystem extends SubsystemBase {
         hardware.driveRightRear.setVeloCoefficients(kp, ki, 0);
 
         if (isFieldCentric){
-            mecanumDrive.driveFieldCentric(x, y, r, angle.firstAngle, true);
+            mecanumDrive.driveFieldCentric(x, y, r, angle, true);
         }else {
             mecanumDrive.driveRobotCentric(x, y, r, squareInputs);
         }
@@ -84,7 +113,6 @@ public class  DriveSubsystem extends SubsystemBase {
 
 
     public void readEncoders(){
-
 
         double frontLeft = hardware.driveLeftFront.encoder.getCorrectedVelocity();
         double frontRight = hardware.driveRightFront.encoder.getCorrectedVelocity();
@@ -101,15 +129,37 @@ public class  DriveSubsystem extends SubsystemBase {
         telemetry.addData("rle", rearLeft);
         telemetry.addData("rre", rearRight);
 
+    }
 
+    public Rotation2d getGyroHeading(){
+        return Rotation2d.fromDegrees(getGyroHeadingDegrees());
+    }
 
+    public double getGyroHeadingDegrees(){
+        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public void readGyro (){
-        angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        telemetry.addData( "gyro", angle.firstAngle);
+        angle = getGyroHeadingDegrees();
+        telemetry.addData( "gyro", angle);
     }
 
+//    public void updateOdometry(){
+//        // Get my wheel speeds; assume .getRate() has been
+//        // set up to return velocity of the encoder
+//        // in meters per second.
+//        MecanumDriveWheelSpeeds wheelSpeeds = new MecanumDriveWheelSpeeds
+//                (
+//                        hardware.driveLeftFront.encoder.getCorrectedVelocity(), m_frontRightEncoder.getRate(),
+//                        m_backLeftEncoder.getRate(), m_backRightEncoder.getRate()
+//                );
+//
+//        // Get my gyro angle.
+//        Rotation2d gyroAngle = getGyroHeading();
+//
+//        // Update the pose
+//        m_pose = odometry.update(gyroAngle, wheelSpeeds);
+//    }
 
     @Override
     public void periodic() {
