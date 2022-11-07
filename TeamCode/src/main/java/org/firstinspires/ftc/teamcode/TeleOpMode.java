@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
 @TeleOp
 public class TeleOpMode extends CommandOpMode {
     private GamepadEx gamepad;
+    private GamepadEx gamepadCo;
 
     private DriveSubsystem driveSubsystem;
     private LiftSubsystem liftSubsystem;
@@ -42,28 +43,29 @@ public class TeleOpMode extends CommandOpMode {
         intakeSubsystem = new IntakeSubSystem(hardware, multipleTelemetry);
 
         gamepad = new GamepadEx(gamepad1);
+        gamepadCo = new GamepadEx(gamepad2);
 
-        downButton = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_DOWN))
+        downButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.DPAD_DOWN))
                 .whenPressed(new InstantCommand(()->liftSubsystem.goToBottom()));
 
-        upButton = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP))
+        upButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.DPAD_UP))
                 .whenPressed(new InstantCommand(()->liftSubsystem.goToTop()));
 
-        middleButton = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_LEFT))
+        middleButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.DPAD_LEFT))
                 .whenPressed(new InstantCommand(()->liftSubsystem.goToMiddle()));
 
-        groundButton = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_RIGHT))
+        groundButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.DPAD_RIGHT))
                 .whenPressed(new InstantCommand(()->liftSubsystem.goToGround()));
 
-        lowButton = (new GamepadButton(gamepad, GamepadKeys.Button.X))
+        lowButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.X))
                 .whenPressed(new InstantCommand(()->liftSubsystem.goToLow()));
 
-        openButton = (new GamepadButton(gamepad, GamepadKeys.Button.Y))
+        openButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.Y))
                 .whenPressed(new InstantCommand(()->intakeSubsystem.open())
                         .andThen(new InstantCommand(()->liftSubsystem.goToBottom()))
                 );
 
-        closeButton = (new GamepadButton(gamepad, GamepadKeys.Button.A))
+        closeButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.A))
                 .whenPressed(new InstantCommand(()->intakeSubsystem.close()));
 
         register(driveSubsystem, liftSubsystem, intakeSubsystem);
