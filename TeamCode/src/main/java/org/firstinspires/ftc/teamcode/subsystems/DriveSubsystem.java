@@ -38,6 +38,12 @@ public class  DriveSubsystem extends SubsystemBase {
     public static boolean squareInputs = true;
     public static boolean isFieldCentric = true;
 
+    private static final double wheelDiameterInches = 0;
+    private static final double pulsesPerRevolution = 0;
+    private static final double inchesPerRevolution = 0;
+    private static final double distancePerPulse = 1;
+    private static final double wheelInchesFromCenter = 0.381;
+
     public static Motor.RunMode runMode=Motor.RunMode.VelocityControl;
     private Pose2d m_pose;
 
@@ -50,6 +56,16 @@ public class  DriveSubsystem extends SubsystemBase {
         hardware.driveLeftRear.setRunMode(runMode);
         hardware.driveRightFront.setRunMode(runMode);
         hardware.driveRightRear.setRunMode(runMode);
+
+        hardware.driveLeftFront.setDistancePerPulse(distancePerPulse);
+        hardware.driveLeftRear.setDistancePerPulse(distancePerPulse);
+        hardware.driveRightFront.setDistancePerPulse(distancePerPulse);
+        hardware.driveRightRear.setDistancePerPulse(distancePerPulse);
+
+        // ***************************************************************
+        // **** Odometry configurations ****
+        // This code is copied/based on code found in this example:
+        // https://docs.ftclib.org/ftclib/kinematics/wpilib-kinematics/mecanum-drive-odometry
 
         // Locations of the wheels relative to the robot center.
         Translation2d m_frontLeftLocation =
@@ -84,6 +100,8 @@ public class  DriveSubsystem extends SubsystemBase {
                 hardware.driveLeftRear,
                 hardware.driveRightRear
         );
+
+        // ***************************************************************
 
         mecanumDrive.setMaxSpeed(1.0);
 
@@ -151,10 +169,10 @@ public class  DriveSubsystem extends SubsystemBase {
         // in meters per second.
         MecanumDriveWheelSpeeds wheelSpeeds = new MecanumDriveWheelSpeeds
                 (
-                        hardware.driveLeftFront.encoder.getCorrectedVelocity(),
-                        hardware.driveRightFront.encoder.getCorrectedVelocity(),
-                        hardware.driveLeftRear.encoder.getCorrectedVelocity(),
-                        hardware.driveRightRear.encoder.getCorrectedVelocity()
+                        hardware.driveLeftFront.getRate(),
+                        hardware.driveRightFront.getRate(),
+                        hardware.driveLeftRear.getRate(),
+                        hardware.driveRightRear.getRate()
                 );
 
         // Get my gyro angle.
