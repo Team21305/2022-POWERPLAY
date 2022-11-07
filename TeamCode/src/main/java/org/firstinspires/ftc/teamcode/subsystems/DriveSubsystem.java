@@ -39,6 +39,7 @@ public class  DriveSubsystem extends SubsystemBase {
     public static boolean isFieldCentric = true;
 
     public static Motor.RunMode runMode=Motor.RunMode.VelocityControl;
+    private Pose2d m_pose;
 
     public DriveSubsystem(Hardware hardware, MultipleTelemetry telemetry){
         imu = hardware.imu;
@@ -144,22 +145,26 @@ public class  DriveSubsystem extends SubsystemBase {
         telemetry.addData( "gyro", angle);
     }
 
-//    public void updateOdometry(){
-//        // Get my wheel speeds; assume .getRate() has been
-//        // set up to return velocity of the encoder
-//        // in meters per second.
-//        MecanumDriveWheelSpeeds wheelSpeeds = new MecanumDriveWheelSpeeds
-//                (
-//                        hardware.driveLeftFront.encoder.getCorrectedVelocity(), m_frontRightEncoder.getRate(),
-//                        m_backLeftEncoder.getRate(), m_backRightEncoder.getRate()
-//                );
-//
-//        // Get my gyro angle.
-//        Rotation2d gyroAngle = getGyroHeading();
-//
-//        // Update the pose
-//        m_pose = odometry.update(gyroAngle, wheelSpeeds);
-//    }
+    public void updateOdometry(){
+        // Get my wheel speeds; assume .getRate() has been
+        // set up to return velocity of the encoder
+        // in meters per second.
+        MecanumDriveWheelSpeeds wheelSpeeds = new MecanumDriveWheelSpeeds
+                (
+                        hardware.driveLeftFront.encoder.getCorrectedVelocity(),
+                        hardware.driveRightFront.encoder.getCorrectedVelocity(),
+                        hardware.driveLeftRear.encoder.getCorrectedVelocity(),
+                        hardware.driveRightRear.encoder.getCorrectedVelocity()
+                );
+
+        // Get my gyro angle.
+        Rotation2d gyroAngle = getGyroHeading();
+
+        // Update the pose
+        m_pose = odometry.updateWithTime((double) System.nanoTime() / 1E9, gyroAngle, wheelSpeeds);
+
+        telemetry.addData("Pose", m_pose);
+    }
 
     @Override
     public void periodic() {
@@ -167,6 +172,7 @@ public class  DriveSubsystem extends SubsystemBase {
 
         readEncoders();
         readGyro();
+        updateOdometry();
 
 
         telemetry.update();
