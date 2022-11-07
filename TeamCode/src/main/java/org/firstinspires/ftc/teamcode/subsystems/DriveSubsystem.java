@@ -17,7 +17,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Hardware;
 
 @Config
@@ -38,11 +37,11 @@ public class  DriveSubsystem extends SubsystemBase {
     public static boolean squareInputs = true;
     public static boolean isFieldCentric = true;
 
-    private static final double wheelDiameterInches = 0;
-    private static final double pulsesPerRevolution = 0;
-    private static final double inchesPerRevolution = 0;
-    private static final double distancePerPulse = 1;
-    private static final double wheelInchesFromCenter = 0.381;
+    private static final double WHEEL_DIAMETER_INCHES = 3.77952756;
+    private static final double PULSES_PER_REV = 537.7;
+    private static final double INCHES_PER_REV = WHEEL_DIAMETER_INCHES * Math.PI;
+    private static final double DISTANCE_PER_PULSE = INCHES_PER_REV / PULSES_PER_REV;
+    private static final double WHEEL_INCHES_FROM_CENTER = 5.0;
 
     public static Motor.RunMode runMode=Motor.RunMode.VelocityControl;
     private Pose2d m_pose;
@@ -57,10 +56,10 @@ public class  DriveSubsystem extends SubsystemBase {
         hardware.driveRightFront.setRunMode(runMode);
         hardware.driveRightRear.setRunMode(runMode);
 
-        hardware.driveLeftFront.setDistancePerPulse(distancePerPulse);
-        hardware.driveLeftRear.setDistancePerPulse(distancePerPulse);
-        hardware.driveRightFront.setDistancePerPulse(distancePerPulse);
-        hardware.driveRightRear.setDistancePerPulse(distancePerPulse);
+        hardware.driveLeftFront.setDistancePerPulse(DISTANCE_PER_PULSE);
+        hardware.driveLeftRear.setDistancePerPulse(DISTANCE_PER_PULSE);
+        hardware.driveRightFront.setDistancePerPulse(DISTANCE_PER_PULSE);
+        hardware.driveRightRear.setDistancePerPulse(DISTANCE_PER_PULSE);
 
         // ***************************************************************
         // **** Odometry configurations ****
@@ -69,13 +68,13 @@ public class  DriveSubsystem extends SubsystemBase {
 
         // Locations of the wheels relative to the robot center.
         Translation2d m_frontLeftLocation =
-                new Translation2d(0.381, 0.381);
+                new Translation2d(WHEEL_INCHES_FROM_CENTER, WHEEL_INCHES_FROM_CENTER);
         Translation2d m_frontRightLocation =
-                new Translation2d(0.381, -0.381);
+                new Translation2d(WHEEL_INCHES_FROM_CENTER, -WHEEL_INCHES_FROM_CENTER);
         Translation2d m_backLeftLocation =
-                new Translation2d(-0.381, 0.381);
+                new Translation2d(-WHEEL_INCHES_FROM_CENTER, WHEEL_INCHES_FROM_CENTER);
         Translation2d m_backRightLocation =
-                new Translation2d(-0.381, -0.381);
+                new Translation2d(-WHEEL_INCHES_FROM_CENTER, -WHEEL_INCHES_FROM_CENTER);
 
         // Creating my kinematics object using the wheel locations.
         MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics
@@ -146,7 +145,7 @@ public class  DriveSubsystem extends SubsystemBase {
         telemetry.addData("fle", frontLeft);
         telemetry.addData("fre", frontRight);
         telemetry.addData("rle", rearLeft);
-        telemetry.addData("rre", rearRight);
+        telemetry.addData("rre", rearRight);;
 
     }
 
