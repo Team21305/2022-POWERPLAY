@@ -13,6 +13,7 @@ import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
+import org.checkerframework.checker.units.UnitsTools;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -22,7 +23,7 @@ import org.firstinspires.ftc.teamcode.Hardware;
 @Config
 public class  DriveSubsystem extends SubsystemBase {
 
-    private final MecanumDrive mecanumDrive;
+    public final MecanumDrive mecanumDrive;
     @androidx.annotation.NonNull
     private final Hardware hardware;
     private final Telemetry telemetry;
@@ -41,7 +42,7 @@ public class  DriveSubsystem extends SubsystemBase {
     private static final double PULSES_PER_REV = 537.7;
     private static final double INCHES_PER_REV = WHEEL_DIAMETER_INCHES * Math.PI;
     private static final double DISTANCE_PER_PULSE = INCHES_PER_REV / PULSES_PER_REV;
-    private static final double WHEEL_INCHES_FROM_CENTER = 5.0;
+    private static final double WHEEL_INCHES_FROM_CENTER = 4.0;
 
     public static Motor.RunMode runMode=Motor.RunMode.VelocityControl;
     private Pose2d m_pose;
@@ -132,10 +133,10 @@ public class  DriveSubsystem extends SubsystemBase {
 
     public void readEncoders(){
 
-        double frontLeft = hardware.driveLeftFront.encoder.getCorrectedVelocity();
-        double frontRight = hardware.driveRightFront.encoder.getCorrectedVelocity();
-        double rearLeft = hardware.driveLeftRear.encoder.getCorrectedVelocity();
-        double rearRight = hardware.driveRightRear.encoder.getCorrectedVelocity();
+        double frontLeft = hardware.driveLeftFront.getRate();
+        double frontRight = hardware.driveRightFront.getRate();
+        double rearLeft = hardware.driveLeftRear.getRate();
+        double rearRight = hardware.driveRightRear.getRate();
 
         telemetry.addData(">LeftFront", hardware.driveLeftFront.get());
         telemetry.addData(">RightFront", hardware.driveRightFront.get());
@@ -145,7 +146,7 @@ public class  DriveSubsystem extends SubsystemBase {
         telemetry.addData("fle", frontLeft);
         telemetry.addData("fre", frontRight);
         telemetry.addData("rle", rearLeft);
-        telemetry.addData("rre", rearRight);;
+        telemetry.addData("rre", rearRight);
 
     }
 
@@ -182,6 +183,11 @@ public class  DriveSubsystem extends SubsystemBase {
 
         telemetry.addData("Pose", m_pose);
     }
+
+    public Pose2d getPose(){
+        return m_pose;
+    }
+
 
     @Override
     public void periodic() {

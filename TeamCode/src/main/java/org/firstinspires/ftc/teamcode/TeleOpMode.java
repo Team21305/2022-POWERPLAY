@@ -7,10 +7,14 @@ import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.purepursuit.waypoints.EndWaypoint;
+import com.arcrobotics.ftclib.purepursuit.waypoints.GeneralWaypoint;
+import com.arcrobotics.ftclib.purepursuit.waypoints.StartWaypoint;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.acmerobotics.dashboard.FtcDashboard;
 
 import org.firstinspires.ftc.teamcode.commands.DefaultDrive;
+import org.firstinspires.ftc.teamcode.commands.PurePursuit;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubSystem;
 import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
@@ -67,6 +71,24 @@ public class TeleOpMode extends CommandOpMode {
 
         closeButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.A))
                 .whenPressed(new InstantCommand(()->intakeSubsystem.close()));
+
+        // create our pure pursuit command
+        PurePursuit ppCommand = new PurePursuit(
+                driveSubsystem.mecanumDrive, driveSubsystem,
+                new StartWaypoint(0, 0),
+                //new GeneralWaypoint(15, 0, 0.5, 0.0, 6),
+                //new GeneralWaypoint(16, 0, 1.0, 0.0, 2),
+                //new GeneralWaypoint(18, 0, 0.5, 0.0, 6),
+                new EndWaypoint(
+                        36, 0, 0, 0.5,
+                        0.0, 0, 12, 10
+                )
+        );
+
+
+        Button auto = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP))
+                .whenPressed(new InstantCommand(()->schedule(ppCommand)));
+
 
         register(driveSubsystem, liftSubsystem, intakeSubsystem);
         driveSubsystem.setDefaultCommand(new DefaultDrive(
