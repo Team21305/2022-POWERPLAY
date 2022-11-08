@@ -12,13 +12,15 @@ import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.checkerframework.checker.units.UnitsTools;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Hardware;
+
+import java.util.concurrent.TimeUnit;
 
 @Config
 public class  DriveSubsystem extends SubsystemBase {
@@ -42,7 +44,9 @@ public class  DriveSubsystem extends SubsystemBase {
     private static final double PULSES_PER_REV = 537.7;
     private static final double INCHES_PER_REV = WHEEL_DIAMETER_INCHES * Math.PI;
     private static final double DISTANCE_PER_PULSE = INCHES_PER_REV / PULSES_PER_REV;
-    private static final double WHEEL_INCHES_FROM_CENTER = 4.0;
+    private static final double L1 = 4.0;
+    private static final double L2 = 4.0;
+
 
     public static Motor.RunMode runMode=Motor.RunMode.VelocityControl;
     private Pose2d m_pose;
@@ -67,15 +71,28 @@ public class  DriveSubsystem extends SubsystemBase {
         // This code is copied/based on code found in this example:
         // https://docs.ftclib.org/ftclib/kinematics/wpilib-kinematics/mecanum-drive-odometry
 
+        //          Front (x)
+        //            ^
+        //   \\ --------------- //
+        //   \\ |             | //      ^
+        //      |             |         | -- l1 (distance from center of robot to wheel center (x))
+        //      |      .      |         v
+        //      |             |
+        //   // |             | \\
+        //   // --------------- \\
+        //
+        //    <------->
+        //    l2  (distance from center out to wheel center (y))
+
         // Locations of the wheels relative to the robot center.
         Translation2d m_frontLeftLocation =
-                new Translation2d(WHEEL_INCHES_FROM_CENTER, WHEEL_INCHES_FROM_CENTER);
+                new Translation2d(L1, L2);
         Translation2d m_frontRightLocation =
-                new Translation2d(WHEEL_INCHES_FROM_CENTER, -WHEEL_INCHES_FROM_CENTER);
+                new Translation2d(L1, -L2);
         Translation2d m_backLeftLocation =
-                new Translation2d(-WHEEL_INCHES_FROM_CENTER, WHEEL_INCHES_FROM_CENTER);
+                new Translation2d(-L1, L2);
         Translation2d m_backRightLocation =
-                new Translation2d(-WHEEL_INCHES_FROM_CENTER, -WHEEL_INCHES_FROM_CENTER);
+                new Translation2d(-L1, -L2);
 
         // Creating my kinematics object using the wheel locations.
         MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics
@@ -177,6 +194,8 @@ public class  DriveSubsystem extends SubsystemBase {
 
         // Get my gyro angle.
         Rotation2d gyroAngle = getGyroHeading();
+
+        TimeUnit.NANOSECONDS.toSeconds(System.nanoTime());
 
         // Update the pose
         m_pose = odometry.updateWithTime((double) System.nanoTime() / 1E9, gyroAngle, wheelSpeeds);
