@@ -96,6 +96,10 @@ public class TeleOpMode extends CommandOpMode {
                 () -> gamepad.getLeftY(),
                 () -> gamepad.getLeftX(),
                 () -> gamepad.getRightX()));
+
+
+        telemetry.addLine("Init Complete");
+        telemetry.update();
     }
 }
 
