@@ -44,8 +44,8 @@ public class  DriveSubsystem extends SubsystemBase {
     private static final double PULSES_PER_REV = 537.7;
     private static final double INCHES_PER_REV = WHEEL_DIAMETER_INCHES * Math.PI;
     private static final double DISTANCE_PER_PULSE = INCHES_PER_REV / PULSES_PER_REV;
-    private static final double L1 = 4.0;
-    private static final double L2 = 4.0;
+    private static final double L1 = 4.33;
+    private static final double L2 = 5.9;
 
 
     public static Motor.RunMode runMode=Motor.RunMode.VelocityControl;

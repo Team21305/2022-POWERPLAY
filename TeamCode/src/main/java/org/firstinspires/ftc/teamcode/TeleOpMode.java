@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -14,12 +15,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.acmerobotics.dashboard.FtcDashboard;
 
 import org.firstinspires.ftc.teamcode.commands.DefaultDrive;
+import org.firstinspires.ftc.teamcode.commands.DriveForward;
+import org.firstinspires.ftc.teamcode.commands.DriveStrafe;
 import org.firstinspires.ftc.teamcode.commands.PurePursuit;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubSystem;
 import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
 
 @TeleOp
+@Config
 public class TeleOpMode extends CommandOpMode {
     private GamepadEx gamepad;
     private GamepadEx gamepadCo;
@@ -34,6 +38,10 @@ public class TeleOpMode extends CommandOpMode {
     private Button middleButton;
     private Button groundButton;
     private Button lowButton;
+
+    public static double ForwardDistance=30;
+    public static double StrafeDistance=28;
+    public static double AutoSpeed=0.7;
 
     @Override
     public void initialize() {
@@ -72,23 +80,17 @@ public class TeleOpMode extends CommandOpMode {
         closeButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.A))
                 .whenPressed(new InstantCommand(()->intakeSubsystem.close()));
 
-        // create our pure pursuit command
-        PurePursuit ppCommand = new PurePursuit(
-                driveSubsystem.mecanumDrive, driveSubsystem,
-                new StartWaypoint(0, 0),
-                //new GeneralWaypoint(15, 0, 0.5, 0.0, 6),
-                //new GeneralWaypoint(16, 0, 1.0, 0.0, 2),
-                //new GeneralWaypoint(18, 0, 0.5, 0.0, 6),
-                new EndWaypoint(
-                        36, 0, 0, 0.5,
-                        0.0, 0, 12, 10
-                )
-        );
-
+        DriveForward dfCommand = new DriveForward(driveSubsystem, ForwardDistance, AutoSpeed);
+        DriveStrafe dsCommand = new DriveStrafe(driveSubsystem, StrafeDistance,AutoSpeed);
 
         Button auto = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP))
-                .whenPressed(new InstantCommand(()->schedule(ppCommand)));
+                .whenPressed(new InstantCommand(()->schedule(dfCommand)));
 
+        Button auto2 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_DOWN))
+                .whenPressed(new InstantCommand(()->schedule(dsCommand)));
+
+        Button auto3 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_RIGHT))
+                .whenPressed(dsCommand.andThen(dfCommand));
 
         register(driveSubsystem, liftSubsystem, intakeSubsystem);
         driveSubsystem.setDefaultCommand(new DefaultDrive(
