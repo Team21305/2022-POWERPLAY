@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ScheduleCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -84,13 +85,13 @@ public class TeleOpMode extends CommandOpMode {
         DriveStrafe dsCommand = new DriveStrafe(driveSubsystem, StrafeDistance,AutoSpeed);
 
         Button auto = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP))
-                .whenPressed(new InstantCommand(()->schedule(dfCommand)));
+                .whenPressed(new DriveForward(driveSubsystem, ForwardDistance, AutoSpeed));
 
         Button auto2 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_DOWN))
-                .whenPressed(new InstantCommand(()->schedule(dsCommand)));
+                .whenPressed(new DriveStrafe(driveSubsystem, StrafeDistance,AutoSpeed));
 
         Button auto3 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_RIGHT))
-                .whenPressed(dsCommand.andThen(dfCommand));
+                .whenPressed(new ScheduleCommand(dsCommand.andThen(dfCommand)));
 
         register(driveSubsystem, liftSubsystem, intakeSubsystem);
         driveSubsystem.setDefaultCommand(new DefaultDrive(
