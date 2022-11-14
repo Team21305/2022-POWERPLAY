@@ -25,75 +25,26 @@ import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
 
 @TeleOp
 @Config
-public class TeleOpMode extends CommandOpMode {
-    private GamepadEx gamepad;
-    private GamepadEx gamepadCo;
-
-    private DriveSubsystem driveSubsystem;
-    private LiftSubsystem liftSubsystem;
-    private IntakeSubSystem intakeSubsystem;
-    private Button downButton;
-    private Button upButton;
-    private Button openButton;
-    private Button closeButton;
-    private Button middleButton;
-    private Button groundButton;
-    private Button lowButton;
-
-    public static double ForwardDistance=30;
-    public static double StrafeDistance=28;
-    public static double AutoSpeed=0.7;
+public class TeleOpMode extends RobotBaseOpMode {
 
     @Override
     public void initialize() {
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        MultipleTelemetry multipleTelemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        telemetry = multipleTelemetry;
+        super.initialize();
 
-        Hardware hardware = new Hardware(hardwareMap);
-        driveSubsystem = new DriveSubsystem(hardware, multipleTelemetry);
-        liftSubsystem = new LiftSubsystem(hardware, multipleTelemetry);
-        intakeSubsystem = new IntakeSubSystem(hardware, multipleTelemetry);
-
-        gamepad = new GamepadEx(gamepad1);
-        gamepadCo = new GamepadEx(gamepad2);
-
-        downButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.DPAD_DOWN))
-                .whenPressed(new InstantCommand(()->liftSubsystem.goToBottom()));
-
-        upButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.DPAD_UP))
-                .whenPressed(new InstantCommand(()->liftSubsystem.goToTop()));
-
-        middleButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.DPAD_LEFT))
-                .whenPressed(new InstantCommand(()->liftSubsystem.goToMiddle()));
-
-        groundButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.DPAD_RIGHT))
-                .whenPressed(new InstantCommand(()->liftSubsystem.goToGround()));
-
-        lowButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.X))
-                .whenPressed(new InstantCommand(()->liftSubsystem.goToLow()));
-
-        openButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.Y))
-                .whenPressed(new InstantCommand(()->intakeSubsystem.open())
+        downButton.whenPressed(new InstantCommand(()->liftSubsystem.goToBottom()));
+        upButton.whenPressed(new InstantCommand(()->liftSubsystem.goToTop()));
+        middleButton.whenPressed(new InstantCommand(()->liftSubsystem.goToMiddle()));
+        groundButton.whenPressed(new InstantCommand(()->liftSubsystem.goToGround()));
+        lowButton.whenPressed(new InstantCommand(()->liftSubsystem.goToLow()));
+        openButton.whenPressed(new InstantCommand(()->intakeSubsystem.open())
                         .andThen(new InstantCommand(()->liftSubsystem.goToBottom()))
                 );
 
-        closeButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.A))
-                .whenPressed(new InstantCommand(()->intakeSubsystem.close()));
+        closeButton.whenPressed(new InstantCommand(()->intakeSubsystem.close()));
 
-        DriveForward dfCommand = new DriveForward(driveSubsystem, ForwardDistance, AutoSpeed);
-        DriveStrafe dsCommand = new DriveStrafe(driveSubsystem, StrafeDistance,AutoSpeed);
 
-        Button auto = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP))
-                .whenPressed(new DriveForward(driveSubsystem, ForwardDistance, AutoSpeed));
 
-        Button auto2 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_DOWN))
-                .whenPressed(new DriveStrafe(driveSubsystem, StrafeDistance,AutoSpeed));
 
-        Button auto3 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_RIGHT))
-                .whenPressed(new ScheduleCommand(dsCommand.andThen(dfCommand)));
-
-        register(driveSubsystem, liftSubsystem, intakeSubsystem);
         driveSubsystem.setDefaultCommand(new DefaultDrive(
                 driveSubsystem,
                 () -> gamepad.getLeftY(),

@@ -38,7 +38,7 @@ package org.firstinspires.ftc.teamcode.vision;
 
         import java.util.ArrayList;
 
-class AprilTagDetectionPipeline extends OpenCvPipeline
+public class AprilTagDetectionPipeline extends OpenCvPipeline
 {
     private long nativeApriltagPtr;
     private Mat grey = new Mat();
@@ -85,7 +85,7 @@ class AprilTagDetectionPipeline extends OpenCvPipeline
     }
 
     @Override
-    public void finalize()
+    protected void finalize()
     {
         // Might be null if createApriltagDetector() threw an exception
         if(nativeApriltagPtr != 0)

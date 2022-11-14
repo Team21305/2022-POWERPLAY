@@ -147,6 +147,9 @@ public class  DriveSubsystem extends SubsystemBase {
         telemetry.addData("r",r);
     }
 
+    public void stop() {
+        mecanumDrive.stop();
+    }
 
     public void readEncoders(){
 
