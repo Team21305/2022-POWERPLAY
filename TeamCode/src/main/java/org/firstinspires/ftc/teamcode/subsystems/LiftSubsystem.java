@@ -13,12 +13,14 @@ public class LiftSubsystem extends SubsystemBase {
     private final Hardware hardware;
     private final MultipleTelemetry telemetry;
 
-    public static double bottom=0.01;
+    public static double bottom=0.04;
     public static double ground=0.04;
-    public static double low=0.38;
+    public static double low=0.4;
     public static double middle=0.64;
     public static double top=1.0;
+    public static double positionAdj = 0.1;
 
+    private double currentPosition;
 
     public LiftSubsystem(Hardware hardware, MultipleTelemetry telemetry) {
 
@@ -29,6 +31,28 @@ public class LiftSubsystem extends SubsystemBase {
     private void goToPosition(double position){
         hardware.liftServo0.setPosition(position);
         hardware.liftServo2.setPosition(position);
+
+        currentPosition = position;
+    }
+
+    public void bumpUp(){
+        double pos = currentPosition+positionAdj;
+
+        if(pos > 1){
+            pos = 1;
+        }
+
+        goToPosition(pos);
+    }
+
+    public void bumpDown(){
+        double pos = currentPosition-positionAdj;
+
+        if(pos < 0){
+            pos = 0;
+        }
+
+        goToPosition(pos);
     }
 
     public void goToBottom(){
@@ -53,7 +77,7 @@ public class LiftSubsystem extends SubsystemBase {
     public void periodic() {
         super.periodic();
 
-        telemetry.addData("bottomservo",bottom);
+        telemetry.addData("currentPosition",currentPosition);
 
         telemetry.update();
     }

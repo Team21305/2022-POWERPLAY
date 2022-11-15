@@ -36,6 +36,11 @@ public class TeleOpMode extends RobotBaseOpMode {
         middleButton.whenPressed(new InstantCommand(()->liftSubsystem.goToMiddle()));
         groundButton.whenPressed(new InstantCommand(()->liftSubsystem.goToGround()));
         lowButton.whenPressed(new InstantCommand(()->liftSubsystem.goToLow()));
+        makyItGoUpy.whenPressed(new InstantCommand(()->liftSubsystem.bumpUp()));
+        makyItGoDowny.whenPressed(new InstantCommand(()->liftSubsystem.bumpDown()));
+
+
+
         openButton.whenPressed(new InstantCommand(()->intakeSubsystem.open())
                         .andThen(new InstantCommand(()->liftSubsystem.goToBottom()))
                 );
