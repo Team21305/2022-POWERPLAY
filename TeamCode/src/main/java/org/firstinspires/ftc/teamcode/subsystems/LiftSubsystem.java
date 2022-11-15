@@ -13,10 +13,11 @@ public class LiftSubsystem extends SubsystemBase {
     private final Hardware hardware;
     private final MultipleTelemetry telemetry;
 
-    public static double bottom=0.96;
-    public static double ground=0.92;
-    public static double low=0.58;
-    public static double middle=0.32;
+    public static double bottom=0.01;
+    public static double ground=0.04;
+    public static double low=0.38;
+    public static double middle=0.64;
+    public static double top=1.0;
 
 
     public LiftSubsystem(Hardware hardware, MultipleTelemetry telemetry) {
@@ -34,7 +35,7 @@ public class LiftSubsystem extends SubsystemBase {
         goToPosition(bottom);
     }
     public void goToTop(){
-        goToPosition(0);
+        goToPosition(top);
 }
     public void goToMiddle(){
         goToPosition(middle);
