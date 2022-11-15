@@ -40,6 +40,8 @@ public class Hardware {
         liftServo4 = hardwareMap.get(Servo.class, "servo4");
         liftServo5 = hardwareMap.get(Servo.class, "servo5");
 
+        liftServo4.setDirection(Servo.Direction.REVERSE);
+
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         imu = hardwareMap.get(BNO055IMU.class, "imu");
