@@ -34,8 +34,8 @@ public class  DriveSubsystem extends SubsystemBase {
 
     private double angle;
 
-    public static double kp = 1.0;
-    public static double ki = 0.0006;
+    public static double kp = 1.5;
+    public static double ki = 0.0;
 
     public static boolean squareInputs = true;
     public static boolean isFieldCentric = true;
