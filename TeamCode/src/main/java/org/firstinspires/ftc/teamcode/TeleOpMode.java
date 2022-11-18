@@ -47,6 +47,8 @@ public class TeleOpMode extends RobotBaseOpMode {
 
         closeButton.whenPressed(new InstantCommand(()->intakeSubsystem.close()));
 
+        justOpenClaw.whenPressed(new InstantCommand(()->intakeSubsystem.open()));
+
 
 
 

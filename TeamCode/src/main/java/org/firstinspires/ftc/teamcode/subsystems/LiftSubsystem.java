@@ -13,12 +13,12 @@ public class LiftSubsystem extends SubsystemBase {
     private final Hardware hardware;
     private final MultipleTelemetry telemetry;
 
-    public static double bottom=0.04;
+    public static double bottom=0.02;
     public static double ground=0.04;
     public static double low=0.4;
     public static double middle=0.64;
     public static double top=1.0;
-    public static double positionAdj = 0.1;
+    public static double positionAdj = 0.02;
 
     private double currentPosition;
 
