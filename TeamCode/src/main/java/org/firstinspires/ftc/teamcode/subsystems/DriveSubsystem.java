@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.arcrobotics.ftclib.hardware.GyroEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
@@ -50,6 +51,7 @@ public class  DriveSubsystem extends SubsystemBase {
 
     public static Motor.RunMode runMode=Motor.RunMode.VelocityControl;
     private Pose2d m_pose;
+    private double gyro_offset;
 
     public DriveSubsystem(Hardware hardware, MultipleTelemetry telemetry){
         imu = hardware.imu;
@@ -121,7 +123,6 @@ public class  DriveSubsystem extends SubsystemBase {
         // ***************************************************************
 
         mecanumDrive.setMaxSpeed(1.0);
-
     }
 
     public void drive(double y, double x, double r){
@@ -137,7 +138,7 @@ public class  DriveSubsystem extends SubsystemBase {
         hardware.driveRightRear.setVeloCoefficients(kp, ki, 0);
 
         if (isFieldCentric){
-            mecanumDrive.driveFieldCentric(x, y, r, angle, true);
+            mecanumDrive.driveFieldCentric(x, y, r, readGyro(), true);
         }else {
             mecanumDrive.driveRobotCentric(x, y, r, squareInputs);
         }
@@ -178,9 +179,14 @@ public class  DriveSubsystem extends SubsystemBase {
         return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
-    public void readGyro (){
-        angle = getGyroHeadingDegrees();
+    public double readGyro (){
+        angle = getGyroHeadingDegrees() - gyro_offset;
         telemetry.addData( "gyro", angle);
+        return angle;
+    }
+
+    public void resetGyro(){
+        gyro_offset += getGyroHeadingDegrees();
     }
 
     public void updateOdometry(){

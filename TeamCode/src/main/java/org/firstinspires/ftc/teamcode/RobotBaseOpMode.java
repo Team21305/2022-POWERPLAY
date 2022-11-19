@@ -36,6 +36,7 @@ public class RobotBaseOpMode extends CommandOpMode {
     public Button auto;
     public Button auto2;
     public Button auto3;
+    public Button reset;
 
 
     @Override
@@ -63,6 +64,7 @@ public class RobotBaseOpMode extends CommandOpMode {
         makyItGoUpy = (new GamepadButton(gamepadCo, GamepadKeys.Button.RIGHT_BUMPER));
         makyItGoDowny = (new GamepadButton(gamepadCo, GamepadKeys.Button.LEFT_BUMPER));
         justOpenClaw = (new GamepadButton(gamepadCo, GamepadKeys.Button.B));
+        reset = (new GamepadButton(gamepad, GamepadKeys.Button.Y));
 
         auto = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_LEFT));
         auto2 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP));

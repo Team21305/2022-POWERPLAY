@@ -49,7 +49,7 @@ public class TeleOpMode extends RobotBaseOpMode {
 
         justOpenClaw.whenPressed(new InstantCommand(()->intakeSubsystem.open()));
 
-
+        reset.whenPressed(new InstantCommand(()-> driveSubsystem.resetGyro()));
 
 
         driveSubsystem.setDefaultCommand(new DefaultDrive(
