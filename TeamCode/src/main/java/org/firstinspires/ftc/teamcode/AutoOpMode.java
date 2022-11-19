@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -38,12 +39,33 @@ public class AutoOpMode extends RobotBaseOpMode {
         auto3.whenPressed(new DriveStrafe(driveSubsystem, StrafeDistance, AutoSpeed)
                 .andThen(new DriveForward(driveSubsystem, ForwardDistance, AutoSpeed)));
 
+        SequentialCommandGroup leftSeq = new SequentialCommandGroup(
+                new InstantCommand(()->intakeSubsystem.close()),
+                new WaitCommand(1000),
+                left,
+                new RunCommand(()->driveSubsystem.stop())
+        );
+
+        SequentialCommandGroup centerSeq = new SequentialCommandGroup(
+                new InstantCommand(()->intakeSubsystem.close()),
+                new WaitCommand(1000),
+                center,
+                new RunCommand(()->driveSubsystem.stop())
+        );
+
+        SequentialCommandGroup rightSeq = new SequentialCommandGroup(
+                new InstantCommand(()->intakeSubsystem.close()),
+                new WaitCommand(1000),
+                right,
+                new RunCommand(()->driveSubsystem.stop())
+        );
+
         SelectCommand autoCommand = new SelectCommand(
                 // the first parameter is a map of commands
                 new HashMap<Object, Command>() {{
-                    put(Position.LEFT, left.andThen(new RunCommand(()->driveSubsystem.stop())));
-                    put(Position.CENTER, center.andThen(new RunCommand(()->driveSubsystem.stop())));
-                    put(Position.RIGHT, right.andThen(new RunCommand(()->driveSubsystem.stop())));
+                    put(Position.LEFT, leftSeq);
+                    put(Position.CENTER, centerSeq);
+                    put(Position.RIGHT, rightSeq);
                 }},
                 // the selector
                 this::getPosition
