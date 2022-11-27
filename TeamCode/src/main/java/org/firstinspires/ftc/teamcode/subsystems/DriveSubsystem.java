@@ -37,6 +37,7 @@ public class  DriveSubsystem extends SubsystemBase {
 
     public static double kp = 1.5;
     public static double ki = 0.0;
+    public static double flKp, frKp, blKp, brKp = 0;
 
     public static boolean squareInputs = true;
     public static boolean isFieldCentric = true;
@@ -132,10 +133,10 @@ public class  DriveSubsystem extends SubsystemBase {
         hardware.driveLeftRear.setFeedforwardCoefficients(0, 0, 0);
         hardware.driveRightRear.setFeedforwardCoefficients(0, 0, 0);
 
-        hardware.driveLeftFront.setVeloCoefficients(kp, ki,0);
-        hardware.driveRightFront.setVeloCoefficients(kp, ki, 0);
-        hardware.driveLeftRear.setVeloCoefficients(kp, ki, 0);
-        hardware.driveRightRear.setVeloCoefficients(kp, ki, 0);
+        hardware.driveLeftFront.setVeloCoefficients(kp+flKp, ki,0);
+        hardware.driveRightFront.setVeloCoefficients(kp+frKp, ki, 0);
+        hardware.driveLeftRear.setVeloCoefficients(kp+blKp, ki, 0);
+        hardware.driveRightRear.setVeloCoefficients(kp+brKp, ki, 0);
 
         if (isFieldCentric){
             mecanumDrive.driveFieldCentric(x, y, r, readGyro(), true);
@@ -164,10 +165,10 @@ public class  DriveSubsystem extends SubsystemBase {
         telemetry.addData(">LeftRear", hardware.driveLeftRear.get());
         telemetry.addData(">RightRear", hardware.driveRightRear.get());
 
-        telemetry.addData("fle", frontLeft);
-        telemetry.addData("fre", frontRight);
-        telemetry.addData("rle", rearLeft);
-        telemetry.addData("rre", rearRight);
+        telemetry.addData("fle<", frontLeft);
+        telemetry.addData("fre<", frontRight);
+        telemetry.addData("ble<", rearLeft);
+        telemetry.addData("bre<", rearRight);
 
     }
 
