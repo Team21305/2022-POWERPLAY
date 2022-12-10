@@ -37,7 +37,10 @@ public class  DriveSubsystem extends SubsystemBase {
 
     public static double kp = 1.5;
     public static double ki = 0.0;
-    public static double flKp, frKp, blKp, brKp = 0;
+    public static double flKp = 0.05;
+    public static double frKp = 0;
+    public static double blKp = 0;
+    public static double brKp = 0;
 
     public static boolean squareInputs = true;
     public static boolean isFieldCentric = true;
@@ -169,6 +172,8 @@ public class  DriveSubsystem extends SubsystemBase {
         telemetry.addData("fre<", frontRight);
         telemetry.addData("ble<", rearLeft);
         telemetry.addData("bre<", rearRight);
+
+        telemetry.addData("FLCount", hardware.driveLeftFront.getCurrentPosition());
 
     }
 
