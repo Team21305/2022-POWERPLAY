@@ -51,10 +51,14 @@ public class TeleOpMode extends RobotBaseOpMode {
 
         reset.whenPressed(new InstantCommand(()-> driveSubsystem.resetGyro()));
 
+        auto2.whenPressed(new DriveStrafe(driveSubsystem, 60, 0.7));
+        auto.whenPressed(new DriveStrafe(driveSubsystem, 60, -0.7));
+
 
         driveSubsystem.setDefaultCommand(new DefaultDrive(
                 driveSubsystem,
-                () -> gamepad.getLeftY(),
+                liftSubsystem,
+                ()-> gamepad.getLeftY(),
                 () -> gamepad.getLeftX(),
                 () -> gamepad.getRightX()));
 
