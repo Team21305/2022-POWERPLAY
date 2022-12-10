@@ -73,6 +73,10 @@ public class LiftSubsystem extends SubsystemBase {
         goToPosition(ground);
     }
 
+    public double getPosition(){
+        return currentPosition;
+    }
+
     @Override
     public void periodic() {
         super.periodic();
