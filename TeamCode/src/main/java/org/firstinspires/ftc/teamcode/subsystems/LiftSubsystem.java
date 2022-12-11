@@ -16,7 +16,7 @@ public class LiftSubsystem extends SubsystemBase {
     public static double bottom=0.02;
     public static double ground=0.04;
     public static double low=0.4;
-    public static double middle=0.64;
+    public static double middle=0.66;
     public static double top=1.0;
     public static double positionAdj = 0.02;
 
@@ -28,7 +28,7 @@ public class LiftSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
     }
 
-    private void goToPosition(double position){
+    public void goToPosition(double position){
         hardware.liftServo0.setPosition(position);
         hardware.liftServo2.setPosition(position);
 
