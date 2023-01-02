@@ -32,6 +32,10 @@ public class TrTest extends LinearOpMode {
     private LiftSubsystem lift;
     private IntakeSubSystem intake;
 
+    //public static double PARK_POS = 22;
+    //public static double PARK_POS = 0;
+    public static double PARK_POS = -24;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -107,6 +111,7 @@ public class TrTest extends LinearOpMode {
 
         TrajectorySequence poseTest = drive
                 .trajectorySequenceBuilder(startPose)
+                .addTemporalMarker(()->lift.goToBottom())
                 .addTemporalMarker(()->intake.close())
                 .addTemporalMarker(1, ()->lift.goToLow())
                 //.lineTo(new Vector2d(30, 0))
@@ -147,7 +152,7 @@ public class TrTest extends LinearOpMode {
         TrajectorySequence poseTest2 = drive
                 .trajectorySequenceBuilder(startPose)
                 .addTemporalMarker(()->intake.close())
-                .addTemporalMarker(.5, ()->lift.goToLow())
+                .addTemporalMarker(.3, ()->lift.goToLow())
                 //.lineTo(new Vector2d(30, 0))
                 .splineTo(new Vector2d(33, 5), Math.toRadians(45))
                 // drop cone
@@ -182,7 +187,7 @@ public class TrTest extends LinearOpMode {
                 .turn(Math.toRadians(-90))
 
                 .addTemporalMarker(()->lift.goToPosition(0.14))
-                .lineToLinearHeading(new Pose2d(55, 22, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(56, 22, Math.toRadians(90)))
 
 
                 // pickup cone
@@ -193,12 +198,20 @@ public class TrTest extends LinearOpMode {
 
                 // go to medium junction
                 .addTemporalMarker(()->lift.goToMiddle())
-                .lineToLinearHeading(new Pose2d(55, -13.5, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(56, -13.5, Math.toRadians(90)))
                 .turn(Math.toRadians(90))
 
                 // drop cone
                 .addTemporalMarker(()->intake.open())
                 .waitSeconds(0.5)
+
+                // turn and go back to stack
+                .turn(Math.toRadians(-90))
+                .addTemporalMarker(()->lift.goToBottom())
+
+                //Park
+                .lineToLinearHeading(new Pose2d(55, PARK_POS, Math.toRadians(90)))
+
 
                 .build();
 
