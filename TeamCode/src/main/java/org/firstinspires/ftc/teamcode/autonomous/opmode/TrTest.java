@@ -148,25 +148,26 @@ public class TrTest extends LinearOpMode {
 
                 .build();
 
+    double multiplier = 1.0;
 
         TrajectorySequence poseTest2 = drive
                 .trajectorySequenceBuilder(startPose)
                 .addTemporalMarker(()->intake.close())
                 .addTemporalMarker(.3, ()->lift.goToLow())
                 //.lineTo(new Vector2d(30, 0))
-                .splineTo(new Vector2d(33, 5), Math.toRadians(45))
+                .splineTo(new Vector2d(33, multiplier * 5), Math.toRadians(multiplier * 45))
                 // drop cone
                 .addTemporalMarker(()->intake.open())
                 //.waitSeconds(0.5)
-                .lineToLinearHeading(new Pose2d(57, 0, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(57, 0, Math.toRadians(multiplier * 90)))
 
                 // drive to cone stack
                 .addTemporalMarker(()->lift.goToPosition(0.18))
-                .splineTo(new Vector2d(49, 22), Math.toRadians(130))
+                .splineTo(new Vector2d(49, multiplier * 22), Math.toRadians(multiplier * 130))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(57, 0, Math.toRadians(90)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(57, 0, Math.toRadians(multiplier * 90)), Math.toRadians(0))
                 .setReversed(false)
-                .lineTo(new Vector2d(55, 22))
+                .lineTo(new Vector2d(55, multiplier * 22))
 
                 // pickup top cone
                 .addTemporalMarker(()->intake.close())
@@ -176,18 +177,18 @@ public class TrTest extends LinearOpMode {
 
                 // go to medium juntion
                 .addTemporalMarker(()->lift.goToMiddle())
-                .lineToLinearHeading(new Pose2d(55, -13.5, Math.toRadians(90)))
-                .turn(Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(55, multiplier * -13.5, Math.toRadians(multiplier * 90)))
+                .turn(Math.toRadians(multiplier * 90))
 
                 // drop cone
                 .addTemporalMarker(()->intake.open())
                 //.waitSeconds(0.5)
 
                 // undo turn
-                .turn(Math.toRadians(-90))
+                .turn(Math.toRadians(multiplier * -90))
 
                 .addTemporalMarker(()->lift.goToPosition(0.14))
-                .lineToLinearHeading(new Pose2d(56, 22, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(56, multiplier * 22, Math.toRadians(multiplier * 90)))
 
 
                 // pickup cone
@@ -198,8 +199,8 @@ public class TrTest extends LinearOpMode {
 
                 // go to medium junction
                 .addTemporalMarker(()->lift.goToMiddle())
-                .lineToLinearHeading(new Pose2d(56, -13.5, Math.toRadians(90)))
-                .turn(Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(56, multiplier * -13.5, Math.toRadians(multiplier * 90)))
+                .turn(Math.toRadians(multiplier * 90))
 
                 // drop cone
                 .addTemporalMarker(()->intake.open())
