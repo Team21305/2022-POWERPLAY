@@ -11,10 +11,10 @@ import org.firstinspires.ftc.teamcode.Hardware;
 public class IntakeSubSystem extends SubsystemBase {
 
     public static double OPEN_POSITION = 0.5;
-    public static double CLOSE_POSITION = 0.2;
+    public static double CLOSE_POSITION = 0.19;
 
     public static double OPEN_POSITION2 = 0.5;
-    public static double CLOSE_POSITION2 = 0.2;
+    public static double CLOSE_POSITION2 = 0.19;
 
     private final Hardware hardware;
     private final MultipleTelemetry telemetry;
