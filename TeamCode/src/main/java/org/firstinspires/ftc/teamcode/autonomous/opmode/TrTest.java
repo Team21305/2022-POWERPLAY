@@ -188,7 +188,7 @@ public class TrTest extends LinearOpMode {
                 .turn(Math.toRadians(multiplier * -90))
 
                 .addTemporalMarker(()->lift.goToPosition(0.14))
-                .lineToLinearHeading(new Pose2d(56, multiplier * 22, Math.toRadians(multiplier * 90)))
+                .lineToLinearHeading(new Pose2d(55, multiplier * 22, Math.toRadians(multiplier * 90)))
 
 
                 // pickup cone
@@ -199,7 +199,7 @@ public class TrTest extends LinearOpMode {
 
                 // go to medium junction
                 .addTemporalMarker(()->lift.goToMiddle())
-                .lineToLinearHeading(new Pose2d(56, multiplier * -13.5, Math.toRadians(multiplier * 90)))
+                .lineToLinearHeading(new Pose2d(55, multiplier * -13.5, Math.toRadians(multiplier * 90)))
                 .turn(Math.toRadians(multiplier * 90))
 
                 // drop cone
@@ -212,22 +212,31 @@ public class TrTest extends LinearOpMode {
 
                 //Park
                 .lineToLinearHeading(new Pose2d(55, PARK_POS, Math.toRadians(90)))
+                .turn(Math.toRadians(-90))
 
 
                 .build();
 
-        TrajectorySequence norahDrive = drive
-                .trajectorySequenceBuilder(startPose)
-                .forward(35)
-                .strafeRight(35)
-                .back(35)
-                .strafeLeft(35)
+        Pose2d startPose2 = new Pose2d(0, 0, Math.toRadians(90));
+
+        drive.setPoseEstimate(startPose2);
+        TrajectorySequence poseTest3 = drive
+                .trajectorySequenceBuilder(startPose2)
+                .addTemporalMarker(()->intake.close())
+                .addTemporalMarker(.3, ()->lift.goToBottom())
+
+                .lineToLinearHeading(new Pose2d(0, multiplier * 22, Math.toRadians(multiplier * 90)))
+
+                .addTemporalMarker(()->intake.close())
+
+
                 .build();
+
 
         waitForStart();
 
         if (!isStopRequested())
-            drive.followTrajectorySequence(poseTest2);
+            drive.followTrajectorySequence(poseTest3);
     }
 
 }
