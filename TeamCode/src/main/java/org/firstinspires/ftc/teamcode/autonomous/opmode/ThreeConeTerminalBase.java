@@ -9,26 +9,38 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
 public class ThreeConeTerminalBase extends AutoBase {
 
     private double flipOverX;
+    Vector2d coneStackPre;
+    Vector2d coneStack;
+    Vector2d terminal;
+    Vector2d lowJunction;
+    Vector2d mediumJunction;
+    Vector2d readSignal;
+
+    Vector2d park;
+
+    double right90;
+    double left90;
+    Pose2d startPose;
 
     ThreeConeTerminalBase(Boolean isQuad2){
 
         flipOverX = isQuad2 ? -1 : 1;
+
+        coneStackPre = new Vector2d(-56, -12 * flipOverX);
+        coneStack = new Vector2d(-58.5, -12 * flipOverX);
+        terminal = new Vector2d(-56, -60 * flipOverX);
+        lowJunction = new Vector2d(-46, -12 * flipOverX);
+        mediumJunction = new Vector2d(-22+medJunXOffset, -12 * flipOverX);
+        readSignal = new Vector2d(-30.5, -60* flipOverX);
+
+        park = new Vector2d(-12, -12 * flipOverX);
+
+        right90 = Math.toRadians(-90 * flipOverX);
+        left90 = Math.toRadians(90 * flipOverX);
+        startPose = new Pose2d(-30.5, -64.5 * flipOverX, Math.toRadians(90 * flipOverX));
     }
 
     double medJunXOffset = 0;
-
-    Vector2d coneStackPre = new Vector2d(-56, -12 * flipOverX);
-    Vector2d coneStack = new Vector2d(-58.5, -12 * flipOverX);
-    Vector2d terminal = new Vector2d(-56, -60 * flipOverX);
-    Vector2d lowJunction = new Vector2d(-46, -12 * flipOverX);
-    Vector2d mediumJunction = new Vector2d(-22+medJunXOffset, -12 * flipOverX);
-    Vector2d readSignal = new Vector2d(-30, -60* flipOverX);
-
-    Vector2d park = new Vector2d(-12, -12 * flipOverX);
-
-    double right90 = Math.toRadians(-90 * flipOverX);
-    double left90 = Math.toRadians(90 * flipOverX);
-    Pose2d startPose = new Pose2d(-31, -63 * flipOverX, Math.toRadians(90 * flipOverX));
 
     @Override
     protected TrajectorySequence getSequence() {
@@ -83,16 +95,29 @@ public class ThreeConeTerminalBase extends AutoBase {
             .addTemporalMarker(() -> intake.open())
             .waitSeconds(.2)
 
-            // Park
-            .lineToLinearHeading(new Pose2d(park, Math.toRadians(90)))
-            //.turn(right90)
-            .waitSeconds(.2)
 
             .build();
+    }
+
+    @Override
+    protected TrajectorySequence getParkingTrajectory(Pose2d beginPose) {
+
+        //int tag = vision.getTag();
+
+        return drive
+                .trajectorySequenceBuilder(beginPose)
+
+                // Park
+                .lineToLinearHeading(new Pose2d(park, Math.toRadians(90)))
+                //.turn(right90)
+                .waitSeconds(.2)
+
+                .build();
     }
 
     @Override
     protected Pose2d getStartingPose(){
         return startPose;
     }
+
 }
