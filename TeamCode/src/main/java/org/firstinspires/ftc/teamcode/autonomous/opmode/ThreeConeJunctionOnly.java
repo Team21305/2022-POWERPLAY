@@ -26,10 +26,6 @@ public class ThreeConeJunctionOnly extends AutoBase {
     ThreeConeJunctionOnly(Boolean isQuad1){
 
         this.isQuad1 = isQuad1;
-    }
-
-    @Override
-    protected TrajectorySequence getSequence() {
 
         flipOverY = isQuad1 ? -1 : 1;
         preConeStack = new Vector2d(36, -7.5 * flipOverY);
@@ -44,6 +40,10 @@ public class ThreeConeJunctionOnly extends AutoBase {
         right90 = Math.toRadians(-90 * flipOverY);
         left90 = Math.toRadians(90 * flipOverY);
         startPose = new Pose2d(-30.5, -64.5 * flipOverY, Math.toRadians(90 * flipOverY));
+    }
+
+    @Override
+    protected TrajectorySequence getSequence() {
 
         TrajectorySequence poseTest2 = drive
                 .trajectorySequenceBuilder(startPose)
