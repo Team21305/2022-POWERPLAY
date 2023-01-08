@@ -13,7 +13,9 @@ public class ThreeConeTerminalBase extends AutoBase {
     Vector2d coneStack;
     Vector2d terminal;
     Vector2d lowJunction;
+    Vector2d lowJunctionF;
     Vector2d mediumJunction;
+    Vector2d mediumJunctionF;
     Vector2d readSignal;
 
     Vector2d park;
@@ -22,22 +24,25 @@ public class ThreeConeTerminalBase extends AutoBase {
     double left90;
     Pose2d startPose;
 
-    ThreeConeTerminalBase(Boolean isQuad2){
+    ThreeConeTerminalBase(Boolean isQuad2, double startingX){
 
         flipOverX = isQuad2 ? -1 : 1;
 
         coneStackPre = new Vector2d(-56, -12 * flipOverX);
         coneStack = new Vector2d(-58.5, -12 * flipOverX);
-        terminal = new Vector2d(-56, -60 * flipOverX);
-        lowJunction = new Vector2d(-46, -12 * flipOverX);
-        mediumJunction = new Vector2d(-22+medJunXOffset, -12 * flipOverX);
-        readSignal = new Vector2d(-30.5, -60* flipOverX);
+        terminal = new Vector2d(-57, -60 * flipOverX);
+        lowJunction = new Vector2d(-47, -12 * flipOverX);
+        lowJunctionF = new Vector2d(-47, -15 * flipOverX);
+        mediumJunction = new Vector2d(-23.5+medJunXOffset, -12 * flipOverX);
+        mediumJunctionF = new Vector2d(-23.5+medJunXOffset, -15 * flipOverX);
+
+        readSignal = new Vector2d(startingX, -60* flipOverX);
 
         park = new Vector2d(-12, -12 * flipOverX);
 
         right90 = Math.toRadians(-90 * flipOverX);
         left90 = Math.toRadians(90 * flipOverX);
-        startPose = new Pose2d(-30.5, -64.5 * flipOverX, Math.toRadians(90 * flipOverX));
+        startPose = new Pose2d(startingX, -64.5 * flipOverX, Math.toRadians(90 * flipOverX));
     }
 
     double medJunXOffset = 0;
@@ -49,7 +54,7 @@ public class ThreeConeTerminalBase extends AutoBase {
             .trajectorySequenceBuilder(startPose)
 
             // read signal
-            .lineToLinearHeading(new Pose2d(readSignal, Math.toRadians(90 * flipOverX)))
+                .lineToLinearHeading(new Pose2d(readSignal, Math.toRadians(90 * flipOverX)))
             .waitSeconds(.1)
 
             // To Terminal
@@ -74,11 +79,14 @@ public class ThreeConeTerminalBase extends AutoBase {
             // To Low Junction
             .lineToLinearHeading(new Pose2d(lowJunction, Math.toRadians(180)))
             .turn(left90)
-            // Drop Cone
+                .lineToLinearHeading(new Pose2d(lowJunctionF, Math.toRadians(-90 * flipOverX)))
+                // Drop Cone
             .addTemporalMarker(() -> intake.open())
+                .lineToLinearHeading(new Pose2d(lowJunction, Math.toRadians(-90 * flipOverX)))
 
 
-            // To Cone Stack
+
+                // To Cone Stack
             .turn(right90)
             .addTemporalMarker(() -> lift.goToPosition(0.14))
             .lineToLinearHeading(new Pose2d(coneStack, Math.toRadians(180)))
@@ -91,9 +99,13 @@ public class ThreeConeTerminalBase extends AutoBase {
             .lineToLinearHeading(new Pose2d(mediumJunction, Math.toRadians(180)))
             .addTemporalMarker(() -> lift.goToMiddle())
             .turn(left90)
-            // Drop Cone
+                .lineToLinearHeading(new Pose2d(mediumJunctionF, Math.toRadians(-90 * flipOverX)))
+
+                // Drop Cone
             .addTemporalMarker(() -> intake.open())
-            .waitSeconds(.2)
+                .lineToLinearHeading(new Pose2d(mediumJunction, Math.toRadians(-90 * flipOverX)))
+
+                .waitSeconds(.2)
 
 
             .build();
@@ -102,14 +114,27 @@ public class ThreeConeTerminalBase extends AutoBase {
     @Override
     protected TrajectorySequence getParkingTrajectory(Pose2d beginPose) {
 
-        //int tag = vision.getTag();
+        int tag = vision.getTag();
+
+        multipleTelemetry.addData("We found tag: ", tag);
+        multipleTelemetry.update();
+
+        double parkOffset = 0;
+
+        if(tag == 1){
+            parkOffset = -22;
+        }
+        if(tag == 2){
+            parkOffset = -44;
+        }
 
         return drive
                 .trajectorySequenceBuilder(beginPose)
 
                 // Park
-                .lineToLinearHeading(new Pose2d(park, Math.toRadians(90)))
-                //.turn(right90)
+                .turn(right90)
+                .lineToLinearHeading(new Pose2d(park.getX() + parkOffset, park.getY() ,Math.toRadians(180)))
+                .turn(right90)
                 .waitSeconds(.2)
 
                 .build();

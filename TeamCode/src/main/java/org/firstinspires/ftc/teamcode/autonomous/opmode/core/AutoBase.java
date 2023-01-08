@@ -17,32 +17,35 @@ public abstract class AutoBase extends LinearOpMode {
     protected LiftSubsystem lift;
     protected IntakeSubSystem intake;
     protected SampleMecanumDrive drive;
-    //protected VisionSubSystem vision;
+    protected VisionSubSystem vision;
+    protected MultipleTelemetry multipleTelemetry;
 
     @Override
     public void runOpMode() throws InterruptedException {
         // Setup robot systems
         FtcDashboard dashboard = FtcDashboard.getInstance();
-        MultipleTelemetry multipleTelemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        multipleTelemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         Hardware hardware = new Hardware(hardwareMap);
 
         drive = new SampleMecanumDrive(hardwareMap);
         lift = new LiftSubsystem(hardware, multipleTelemetry);
         intake = new IntakeSubSystem(hardware, multipleTelemetry);
-        //vision = new VisionSubSystem(hardware, multipleTelemetry);
+        vision = new VisionSubSystem(hardware, multipleTelemetry);
+
+        waitForStart();
+
+        vision.periodic(); // trigger a read of the april tag.
+        vision.periodic(); // trigger a read of the april tag.
 
         // Update drive with our starting pose.
         drive.setPoseEstimate(getStartingPose());
 
         TrajectorySequence auto = getSequence();
 
-        waitForStart();
-
-
-        TrajectorySequence park = getParkingTrajectory(auto.end());
-
         if (!isStopRequested()) {
+            vision.periodic(); // trigger a read of the april tag.
             drive.followTrajectorySequence(auto);
+            TrajectorySequence park = getParkingTrajectory(auto.end());
             if(park != null) {
                 drive.setPoseEstimate(auto.end());
                 drive.followTrajectorySequence(park);

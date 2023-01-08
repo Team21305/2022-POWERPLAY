@@ -74,6 +74,8 @@ public class VisionSubSystem extends SubsystemBase {
     public void periodic() {
         ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
+        telemetry.addData("Got HERE!", true);
+
         if(currentDetections.size() != 0)
         {
             boolean tagFound = false;

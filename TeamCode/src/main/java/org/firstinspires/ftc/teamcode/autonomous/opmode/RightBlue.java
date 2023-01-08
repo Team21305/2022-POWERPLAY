@@ -7,6 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class RightBlue extends ThreeConeTerminalBase {
 
     public RightBlue() {
-        super(true);
+        super(true, -39.5);
     }
 }
