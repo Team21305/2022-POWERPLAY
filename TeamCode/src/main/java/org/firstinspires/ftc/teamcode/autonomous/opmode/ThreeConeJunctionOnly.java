@@ -8,14 +8,13 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
 
 public class ThreeConeJunctionOnly extends AutoBase {
 
-    private Boolean isQuad1 = false;
-    private double flipOverY;
+    private Boolean isQuad1;
+    private double flipOverX;
     Vector2d coneStack;
     Vector2d preConeStack;
     Vector2d buryCone;
     Vector2d lowJunction45;
     Vector2d mediumJunction;
-    Vector2d readSignal;
 
     Vector2d park;
 
@@ -23,40 +22,44 @@ public class ThreeConeJunctionOnly extends AutoBase {
     double left90;
     Pose2d startPose;
 
-    ThreeConeJunctionOnly(Boolean isQuad1){
+    ThreeConeJunctionOnly(Boolean isQuad1, double startingX){
 
         this.isQuad1 = isQuad1;
 
-        flipOverY = isQuad1 ? -1 : 1;
-        preConeStack = new Vector2d(36, -7.5 * flipOverY);
-        buryCone = new Vector2d(58, -15.5);
-        coneStack = new Vector2d(-58.5, -9.5 * flipOverY);
-        lowJunction45 = new Vector2d(41, -31.5 * flipOverY);
-        mediumJunction = new Vector2d(22.5, -9.5 * flipOverY);
-        readSignal = new Vector2d(-30.5, -60* flipOverY);
+        flipOverX = isQuad1 ? -1 : 1;
+        preConeStack = new Vector2d(36, -7.5 * flipOverX);
+        buryCone = new Vector2d(58, -15.5 * flipOverX);
+        coneStack = new Vector2d(58.5, -9.5 * flipOverX);
+        lowJunction45 = new Vector2d(41, -31.5 * flipOverX);
+        mediumJunction = new Vector2d(22.5, -9.5 * flipOverX);
 
-        park = new Vector2d(-12, -12 * flipOverY);
+        park = new Vector2d(12, -12 * flipOverX);
 
-        right90 = Math.toRadians(-90 * flipOverY);
-        left90 = Math.toRadians(90 * flipOverY);
-        startPose = new Pose2d(-30.5, -64.5 * flipOverY, Math.toRadians(90 * flipOverY));
+        right90 = Math.toRadians(-90 * flipOverX);
+        left90 = Math.toRadians(90 * flipOverX);
+        startPose = new Pose2d(startingX, -64.5 * flipOverX, Math.toRadians(90 * flipOverX));
     }
 
     @Override
     protected TrajectorySequence getSequence() {
 
+        multipleTelemetry.addLine("getSequence is called");
+        multipleTelemetry.update();
+
+        // Written from the Right-Red station.  (Quadrant II)
+
         TrajectorySequence poseTest2 = drive
                 .trajectorySequenceBuilder(startPose)
                 .addTemporalMarker(()->intake.close())
                 .addTemporalMarker(.3, ()->lift.goToLow())
-                .lineToLinearHeading(new Pose2d(lowJunction45, Math.toRadians(flipOverY * 45)))
+                .lineToLinearHeading(new Pose2d(lowJunction45, Math.toRadians(flipOverX * 45)))
                 // drop cone
                 .addTemporalMarker(()->intake.open())
                 .lineToLinearHeading(new Pose2d(preConeStack, 0))
 
                 // drive to cone stack, bury cone
                 .addTemporalMarker(()->lift.goToPosition(0.18))
-                .splineTo(buryCone, Math.toRadians(flipOverY * -40))
+                .splineTo(buryCone, Math.toRadians(flipOverX * -40))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(preConeStack, 0), 0)
                 .setReversed(false)

@@ -8,6 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class LeftBlue extends ThreeConeJunctionOnly{
 
     LeftBlue() {
-        super(true);
+        super(true, -30.5);
     }
 }

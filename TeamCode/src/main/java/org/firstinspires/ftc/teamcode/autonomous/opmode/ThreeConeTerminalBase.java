@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
 public class ThreeConeTerminalBase extends AutoBase {
 
     private double flipOverX;
+    private final Boolean isQuad2;
     Vector2d coneStackPre;
     Vector2d coneStack;
     Vector2d terminal;
@@ -24,17 +25,18 @@ public class ThreeConeTerminalBase extends AutoBase {
     double left90;
     Pose2d startPose;
 
-    ThreeConeTerminalBase(Boolean isQuad2, double startingX){
+    ThreeConeTerminalBase(Boolean isQuad2, double startingX, Vector2d lowOffset, Vector2d mediumOffset) {
 
         flipOverX = isQuad2 ? -1 : 1;
+        this.isQuad2 = isQuad2;
 
         coneStackPre = new Vector2d(-56, -12 * flipOverX);
         coneStack = new Vector2d(-58.5, -12 * flipOverX);
         terminal = new Vector2d(-57, -60 * flipOverX);
         lowJunction = new Vector2d(-47, -12 * flipOverX);
-        lowJunctionF = new Vector2d(-47, -15 * flipOverX);
+        lowJunctionF = new Vector2d(-47, -15 * flipOverX).plus(lowOffset);
         mediumJunction = new Vector2d(-23.5+medJunXOffset, -12 * flipOverX);
-        mediumJunctionF = new Vector2d(-23.5+medJunXOffset, -15 * flipOverX);
+        mediumJunctionF = new Vector2d(-23.5, -15 * flipOverX).plus(mediumOffset);
 
         readSignal = new Vector2d(startingX, -60* flipOverX);
 
@@ -116,16 +118,16 @@ public class ThreeConeTerminalBase extends AutoBase {
 
         int tag = vision.getTag();
 
-        multipleTelemetry.addData("We found tag: ", tag);
+        multipleTelemetry.addData("Parking using tag", tag);
         multipleTelemetry.update();
 
-        double parkOffset = 0;
+        double parkOffset = isQuad2 ? 0 : -44;
 
         if(tag == 1){
             parkOffset = -22;
         }
         if(tag == 2){
-            parkOffset = -44;
+            parkOffset = isQuad2 ? -44: 0;
         }
 
         return drive

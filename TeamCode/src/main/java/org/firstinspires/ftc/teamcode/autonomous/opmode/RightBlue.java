@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.opmode;
 
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
@@ -7,6 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class RightBlue extends ThreeConeTerminalBase {
 
     public RightBlue() {
-        super(true, -39.5);
+        super(true, -40, new Vector2d(0, -1), new Vector2d(0, -1));
     }
 }
