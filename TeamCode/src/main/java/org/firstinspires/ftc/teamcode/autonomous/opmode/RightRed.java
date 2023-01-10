@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.autonomous.opmode;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.autonomous.opmode.core.Adjustments;
+@Autonomous(name="Red Right: 3-Cone", group="Red")
+public class RightRed extends ThreeConeJunctionOnly{
 
-@TeleOp(name="RR", group="TEST")
-public class RightRed extends ThreeConeTerminalBase2{
-
-    RightRed() {
+    public RightRed() {
         super(false, 39.5);
     }
 }
