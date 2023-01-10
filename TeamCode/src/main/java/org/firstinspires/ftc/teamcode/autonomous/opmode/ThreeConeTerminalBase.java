@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
 public class ThreeConeTerminalBase extends AutoBase {
 
     private double flipOverX;
-    private final Boolean isQuad2;
+    private Boolean isQuad2;
     Vector2d coneStackPre;
     Vector2d coneStack;
     Vector2d terminal;

@@ -8,23 +8,20 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
 
 public class ThreeConeJunctionOnly extends AutoBase {
 
-    private Boolean isQuad1;
-    private double flipOverX;
-    Vector2d coneStack;
-    Vector2d preConeStack;
-    Vector2d buryCone;
-    Vector2d lowJunction45;
-    Vector2d mediumJunction;
+    private final double flipOverX;
+    private final Vector2d coneStack;
+    private final Vector2d preConeStack;
+    private final Vector2d buryCone;
+    private final Vector2d lowJunction45;
+    private final Vector2d mediumJunction;
 
-    Vector2d park;
+    private final Vector2d park;
 
-    double right90;
-    double left90;
-    Pose2d startPose;
+    private final double right90;
+    private final double left90;
+    private final Pose2d startPose;
 
     ThreeConeJunctionOnly(Boolean isQuad1, double startingX){
-
-        this.isQuad1 = isQuad1;
 
         flipOverX = isQuad1 ? -1 : 1;
         preConeStack = new Vector2d(36, -7.5 * flipOverX);

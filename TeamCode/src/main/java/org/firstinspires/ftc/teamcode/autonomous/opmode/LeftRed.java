@@ -4,7 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
-@Autonomous(name="Left Red: 3-Cone", group="3-Cone")
+@Autonomous(name="Red Left: 3-Cone", group="Red")
 public class LeftRed extends ThreeConeTerminalBase {
 
     public LeftRed() {
