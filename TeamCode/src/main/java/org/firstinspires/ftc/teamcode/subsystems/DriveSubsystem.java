@@ -192,7 +192,7 @@ public class  DriveSubsystem extends SubsystemBase {
     }
 
     public void resetGyro(){
-        gyro_offset += getGyroHeadingDegrees();
+        gyro_offset = getGyroHeadingDegrees();
     }
 
     public void updateOdometry(){
@@ -225,9 +225,8 @@ public class  DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        super.periodic();
 
-        readEncoders();
+        //readEncoders();
         readGyro();
         updateOdometry();
 
