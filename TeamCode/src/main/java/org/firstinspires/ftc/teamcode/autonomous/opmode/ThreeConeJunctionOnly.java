@@ -25,7 +25,7 @@ public class ThreeConeJunctionOnly extends AutoBase {
     private final Vector2d readSignal;
     private final Vector2d terminal;
 
-    ThreeConeJunctionOnly(Boolean isQuad1, double startingX){
+    ThreeConeJunctionOnly(Boolean isQuad1, double startingX, Vector2d lowAdjust, Vector2d mediumAdjust){
 
         flipOverX = isQuad1 ? -1 : 1;
         this.isQuad1 = isQuad1;
@@ -36,7 +36,7 @@ public class ThreeConeJunctionOnly extends AutoBase {
         preConeStack = new Vector2d(56, -12 * flipOverX);
         //buryCone = new Vector2d(58, -15.5 * flipOverX);
         coneStack = new Vector2d(58.5, -12 * flipOverX);
-        lowJunction45 = new Vector2d(57, -26 * flipOverX);
+        lowJunction45 = new Vector2d(57, -25 * flipOverX);
         mediumJunction = new Vector2d(22.5, -9.5 * flipOverX);
         mediumJunctionF = new Vector2d(23.5, -12 * flipOverX);
 
