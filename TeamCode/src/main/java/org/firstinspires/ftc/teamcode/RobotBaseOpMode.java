@@ -21,7 +21,7 @@ public class RobotBaseOpMode extends CommandOpMode {
     public DriveSubsystem driveSubsystem;
     public LiftSubsystem liftSubsystem;
     public IntakeSubSystem intakeSubsystem;
-    public VisionSubSystem visionSubSystem;
+    //public VisionSubSystem visionSubSystem;
 
     public Button downButton;
     public Button upButton;
@@ -37,23 +37,26 @@ public class RobotBaseOpMode extends CommandOpMode {
     public Button auto2;
     public Button auto3;
     public Button reset;
+    public Button sideStackUp;
+    public Button sideStackDown;
 
 
     @Override
     public void initialize() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         MultipleTelemetry multipleTelemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        telemetry = multipleTelemetry;
 
         Hardware hardware = new Hardware(hardwareMap);
         driveSubsystem = new DriveSubsystem(hardware, multipleTelemetry);
         liftSubsystem = new LiftSubsystem(hardware, multipleTelemetry);
         intakeSubsystem = new IntakeSubSystem(hardware, multipleTelemetry);
-        visionSubSystem = new VisionSubSystem(hardware, multipleTelemetry);
+        //visionSubSystem = new VisionSubSystem(hardware, multipleTelemetry);
 
         gamepad = new GamepadEx(gamepad1);
         gamepadCo = new GamepadEx(gamepad2);
 
+        sideStackUp = (new GamepadButton(gamepadCo, GamepadKeys.Button.START));
+        sideStackDown = (new GamepadButton(gamepadCo, GamepadKeys.Button.BACK));
         closeButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.A));
         openButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.Y));
         lowButton = (new GamepadButton(gamepadCo, GamepadKeys.Button.X));
@@ -70,7 +73,7 @@ public class RobotBaseOpMode extends CommandOpMode {
         auto2 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP));
         auto3 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_RIGHT));
 
-        register(driveSubsystem, liftSubsystem, intakeSubsystem, visionSubSystem);
+        register(driveSubsystem, liftSubsystem, intakeSubsystem);
 
 
 

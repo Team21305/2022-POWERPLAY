@@ -22,6 +22,8 @@ public class LiftSubsystem extends SubsystemBase {
 
     private double currentPosition;
 
+    private int sideCone = 0;
+
     public LiftSubsystem(Hardware hardware, MultipleTelemetry telemetry) {
 
         this.hardware = hardware;
@@ -33,6 +35,30 @@ public class LiftSubsystem extends SubsystemBase {
         hardware.liftServo2.setPosition(position);
 
         currentPosition = position;
+    }
+
+    public void sideStackUp(){
+        if(sideCone >= 4){
+            sideCone = 4;
+        }
+        else {
+            sideCone = sideCone + 1;
+        }
+
+        goToPosition(0.02+sideCone*0.04);
+
+    }
+
+    public void sideStackDown(){
+        if(sideCone <= 0){
+            sideCone = 0;
+        }
+        else{
+            sideCone = sideCone - 1;
+        }
+
+        goToPosition(0.02+sideCone*0.04);
+
     }
 
     public void bumpUp(){
@@ -79,11 +105,9 @@ public class LiftSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        super.periodic();
 
         telemetry.addData("currentPosition",currentPosition);
-
-        telemetry.update();
+        telemetry.addData("^^ CONE STACK ^^", sideCone + 1);
     }
 }
 
