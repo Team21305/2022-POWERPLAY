@@ -62,6 +62,7 @@ public class  DriveSubsystem extends SubsystemBase {
         this.hardware = hardware;
         this.telemetry = telemetry;
 
+        telemetry.clearAll();
         hardware.driveLeftFront.setRunMode(runMode);
         hardware.driveLeftRear.setRunMode(runMode);
         hardware.driveRightFront.setRunMode(runMode);

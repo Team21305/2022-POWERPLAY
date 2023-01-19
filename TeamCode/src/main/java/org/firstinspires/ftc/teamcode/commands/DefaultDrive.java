@@ -41,14 +41,17 @@ public class DefaultDrive extends CommandBase {
         double liftPosition = liftSubsystem.getPosition();
 
         double scale = 1.0;
+        double scale2 = 1.0;
+
 
         if (liftPosition > 0.7){
 
             scale = (-0.5/0.3) * liftPosition + 2.166;
+            scale2 = 1 - scale * 0.5;
 
         }
 
-        driveSubsysem.drive(scale * m_forward.getAsDouble(),scale * m_strafe.getAsDouble(), scale * m_rotation.getAsDouble());
+        driveSubsysem.drive(scale * m_forward.getAsDouble(),scale * m_strafe.getAsDouble(), scale2 * m_rotation.getAsDouble());
     }
 
 }
