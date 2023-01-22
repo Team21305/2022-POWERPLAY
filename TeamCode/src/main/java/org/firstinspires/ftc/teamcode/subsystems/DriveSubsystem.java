@@ -19,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware;
 
 import java.util.concurrent.TimeUnit;
@@ -217,6 +218,7 @@ public class  DriveSubsystem extends SubsystemBase {
         m_pose = odometry.updateWithTime((double) System.nanoTime() / 1E9, gyroAngle, wheelSpeeds);
 
         telemetry.addData("Pose", m_pose);
+        telemetry.addData("range", String.format("%.01f in", hardware.sensorRange.getDistance(DistanceUnit.INCH)));
     }
 
     public Pose2d getPose(){

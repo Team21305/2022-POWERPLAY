@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -17,6 +18,7 @@ public class Hardware {
     public Servo liftServo0, liftServo2;
     public Servo liftServo4, liftServo5;
     public BNO055IMU imu;
+    public DistanceSensor sensorRange;
 
     public Hardware(HardwareMap hardwareMap) {
         driveLeftFront = new MotorEx(hardwareMap, "driveLeftFront", Motor.GoBILDA.RPM_312);
@@ -31,6 +33,7 @@ public class Hardware {
         //driveRightFront.encoder.setDirection(Motor.Direction.REVERSE);
         //driveRightRear.encoder.setDirection(Motor.Direction.REVERSE);
 
+        sensorRange = hardwareMap.get(DistanceSensor.class, "RangeSensor");
 
         liftServo0 = hardwareMap.get(Servo.class, "servo0");
         liftServo2 = hardwareMap.get(Servo.class, "servo2");
