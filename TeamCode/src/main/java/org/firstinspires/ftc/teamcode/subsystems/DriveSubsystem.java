@@ -197,6 +197,10 @@ public class  DriveSubsystem extends SubsystemBase {
         gyro_offset = getGyroHeadingDegrees();
     }
 
+    public double getRange(){
+       return hardware.sensorRange.getDistance(DistanceUnit.INCH);
+    }
+
     public void updateOdometry(){
         // Get my wheel speeds; assume .getRate() has been
         // set up to return velocity of the encoder

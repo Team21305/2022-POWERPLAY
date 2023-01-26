@@ -18,6 +18,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import org.firstinspires.ftc.teamcode.commands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.commands.DriveForward;
 import org.firstinspires.ftc.teamcode.commands.DriveStrafe;
+import org.firstinspires.ftc.teamcode.commands.DriveToWall;
 import org.firstinspires.ftc.teamcode.commands.PurePursuit;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubSystem;
@@ -40,6 +41,7 @@ public class TeleOpMode extends RobotBaseOpMode {
         makyItGoDowny.whenPressed(new InstantCommand(()->liftSubsystem.bumpDown()));
         sideStackUp.whenPressed(new InstantCommand(()->liftSubsystem.sideStackUp()));
         sideStackDown.whenPressed(new InstantCommand(()->liftSubsystem.sideStackDown()));
+        driveToWall.whenPressed(new DriveToWall(driveSubsystem, 12, .5));
 
 
         openButton.whenPressed(new InstantCommand(()->intakeSubsystem.open())

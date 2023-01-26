@@ -39,6 +39,7 @@ public class RobotBaseOpMode extends CommandOpMode {
     public Button reset;
     public Button sideStackUp;
     public Button sideStackDown;
+    public Button driveToWall;
 
 
     @Override
@@ -72,6 +73,7 @@ public class RobotBaseOpMode extends CommandOpMode {
         auto = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_LEFT));
         auto2 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP));
         auto3 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_RIGHT));
+        driveToWall = (new GamepadButton(gamepad, GamepadKeys.Button.X));
 
         register(driveSubsystem, liftSubsystem, intakeSubsystem);
 
