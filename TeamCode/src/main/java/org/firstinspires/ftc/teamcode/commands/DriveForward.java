@@ -23,11 +23,11 @@ public class DriveForward extends CommandBase {
     }
 
     public void execute() {
-        drive.drive(speed,0.0,0);
+        drive.drive(speed,0.0,0, false);
     }
 
     public void end(boolean interrupted) {
-        drive.drive(0,0,0);
+        drive.drive(0,0,0, false);
     }
 
     public boolean isFinished() {

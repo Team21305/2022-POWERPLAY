@@ -23,11 +23,11 @@ public class DriveStrafe extends CommandBase {
     }
 
     public void execute() {
-        drive.drive(0,speed,0);
+        drive.drive(0,speed,0, false);
     }
 
     public void end(boolean interrupted) {
-        drive.drive(0,0,0);
+        drive.drive(0,0,0, false);
     }
 
     public boolean isFinished() {

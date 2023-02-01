@@ -51,7 +51,7 @@ public class DefaultDrive extends CommandBase {
 
         }
 
-        driveSubsysem.drive(scale * m_forward.getAsDouble(),scale * m_strafe.getAsDouble(), scale2 * m_rotation.getAsDouble());
+        driveSubsysem.drive(scale * m_forward.getAsDouble(),scale * m_strafe.getAsDouble(), scale2 * m_rotation.getAsDouble(), true);
     }
 
 }

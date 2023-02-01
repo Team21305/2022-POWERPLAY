@@ -123,8 +123,6 @@ public class VisionSubSystem extends SubsystemBase {
             }
 
         }
-
-        telemetry.update();
     }
 
     void tagToTelemetry(AprilTagDetection detection)

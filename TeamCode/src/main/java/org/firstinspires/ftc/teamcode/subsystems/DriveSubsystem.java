@@ -44,7 +44,6 @@ public class  DriveSubsystem extends SubsystemBase {
     public static double brKp = 0;
 
     public static boolean squareInputs = true;
-    public static boolean isFieldCentric = true;
 
     private static final double WHEEL_DIAMETER_INCHES = 3.77952756;
     private static final double PULSES_PER_REV = 537.7;
@@ -63,7 +62,6 @@ public class  DriveSubsystem extends SubsystemBase {
         this.hardware = hardware;
         this.telemetry = telemetry;
 
-        telemetry.clearAll();
         hardware.driveLeftFront.setRunMode(runMode);
         hardware.driveLeftRear.setRunMode(runMode);
         hardware.driveRightFront.setRunMode(runMode);
@@ -131,7 +129,7 @@ public class  DriveSubsystem extends SubsystemBase {
         mecanumDrive.setMaxSpeed(1.0);
     }
 
-    public void drive(double y, double x, double r){
+    public void drive(double y, double x, double r, boolean isFieldCentric){
 
         hardware.driveLeftFront.setFeedforwardCoefficients(0, 0,0);
         hardware.driveRightFront.setFeedforwardCoefficients(0, 0, 0);

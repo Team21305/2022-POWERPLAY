@@ -28,6 +28,9 @@ import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
 @Config
 public class TeleOpMode extends RobotBaseOpMode {
 
+    public static double DISTANCE_TO_WALL = 6.0;
+    public static double DISTANCE_TO_WALL_SPEED = 0.6;
+
     @Override
     public void initialize() {
         super.initialize();
@@ -41,7 +44,7 @@ public class TeleOpMode extends RobotBaseOpMode {
         makyItGoDowny.whenPressed(new InstantCommand(()->liftSubsystem.bumpDown()));
         sideStackUp.whenPressed(new InstantCommand(()->liftSubsystem.sideStackUp()));
         sideStackDown.whenPressed(new InstantCommand(()->liftSubsystem.sideStackDown()));
-        driveToWall.whenPressed(new DriveToWall(driveSubsystem, 12, .5));
+        driveToWall.whenPressed(new DriveToWall(driveSubsystem, DISTANCE_TO_WALL, DISTANCE_TO_WALL_SPEED));
 
 
         openButton.whenPressed(new InstantCommand(()->intakeSubsystem.open())
@@ -65,8 +68,10 @@ public class TeleOpMode extends RobotBaseOpMode {
                 () -> gamepad.getLeftX(),
                 () -> gamepad.getRightX()));
 
+        telemetry.clearAll();
 
         telemetry.addLine("Init Complete");
+
         telemetry.update();
     }
 }
