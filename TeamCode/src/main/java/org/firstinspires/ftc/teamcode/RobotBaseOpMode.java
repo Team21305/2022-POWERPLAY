@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubSystem;
 import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
@@ -45,6 +46,8 @@ public class RobotBaseOpMode extends CommandOpMode {
     @Override
     public void initialize() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry.setDisplayFormat(Telemetry.DisplayFormat.HTML);
+
         MultipleTelemetry multipleTelemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         Hardware hardware = new Hardware(hardwareMap);
@@ -68,7 +71,7 @@ public class RobotBaseOpMode extends CommandOpMode {
         makyItGoUpy = (new GamepadButton(gamepadCo, GamepadKeys.Button.RIGHT_BUMPER));
         makyItGoDowny = (new GamepadButton(gamepadCo, GamepadKeys.Button.LEFT_BUMPER));
         justOpenClaw = (new GamepadButton(gamepadCo, GamepadKeys.Button.B));
-        reset = (new GamepadButton(gamepad, GamepadKeys.Button.Y));
+        reset = (new GamepadButton(gamepad, GamepadKeys.Button.START));
 
         auto = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_LEFT));
         auto2 = (new GamepadButton(gamepad, GamepadKeys.Button.DPAD_UP));

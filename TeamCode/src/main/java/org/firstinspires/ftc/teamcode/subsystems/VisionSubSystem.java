@@ -61,6 +61,9 @@ public class VisionSubSystem extends SubsystemBase {
         telemetry.setMsTransmissionInterval(50);
 
         FtcDashboard.getInstance().startCameraStream(hardware.camera, 0);
+
+        telemetry.addLine("Vision Subsystem Constructor End.");
+        telemetry.update();
     }
 
     public int getTag (){

@@ -7,6 +7,8 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware;
 
+import java.util.Arrays;
+
 @Config
 public class LiftSubsystem extends SubsystemBase {
 
@@ -103,10 +105,36 @@ public class LiftSubsystem extends SubsystemBase {
         return currentPosition;
     }
 
+    public static String[][] characters = {
+            { "  ## ", " ######   ", " #####  ", " #   # ", " #####  "},
+            { " ### ", "      ##  ", "     ## ", " #   # ", " #      "},
+            { "  ## ", "  #####   ", "  ####  ", " ##### ", " #####  "},
+            { "  ## ", " ##       ", "     ## ", "     # ", "     ## "},
+            { "  ## ", " #######  ", " #####  ", "     # ", " #####  "}
+    };
+
+    public static String[] lines(int level){
+
+        String[] lines = new String[6];
+        Arrays.fill(lines, "");
+
+        for(int row = 0; row < 5; row++){
+            lines[row] += characters[row][level];
+        }
+
+        return lines;
+    }
+
     @Override
     public void periodic() {
 
-        telemetry.addData("currentPosition",currentPosition);
+        telemetry.addData("currentPosition", currentPosition);
+
+        telemetry.setDisplayFormat(Telemetry.DisplayFormat.HTML);
+        for (String line : lines(sideCone)) {
+            telemetry.addLine("<font face=\"monospace\">" + line.replaceAll("\\s", "&nbsp;") + "</font>");
+        }
+
         telemetry.addData("^^ CONE STACK ^^", sideCone + 1);
     }
 }
