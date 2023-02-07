@@ -23,6 +23,8 @@ public class ThreeConeJunctionOnly extends AutoBase {
     private final Pose2d startPose;
     private final Boolean isQuad1;
     private final Vector2d readSignal;
+    private final Vector2d lowAdjust;
+    private final Vector2d mediumAdjust;
     private final Vector2d terminal;
 
     ThreeConeJunctionOnly(Boolean isQuad1, double startingX, Vector2d lowAdjust, Vector2d mediumAdjust){
@@ -31,13 +33,15 @@ public class ThreeConeJunctionOnly extends AutoBase {
         this.isQuad1 = isQuad1;
 
         readSignal = new Vector2d(startingX, -60* flipOverX);
+        this.lowAdjust = lowAdjust;
+        this.mediumAdjust = mediumAdjust;
         terminal = new Vector2d(57, -60 * flipOverX);
 
         preConeStack = new Vector2d(56, -12 * flipOverX);
         //buryCone = new Vector2d(58, -15.5 * flipOverX);
         coneStack = new Vector2d(58.5, -12 * flipOverX);
         lowJunction45 = new Vector2d(57, -25 * flipOverX);
-        mediumJunction = new Vector2d(22.5, -9.5 * flipOverX);
+        mediumJunction = new Vector2d(22.5, -11 * flipOverX);
         mediumJunctionF = new Vector2d(23.5, -12 * flipOverX);
 
         park = new Vector2d(56, -12 * flipOverX);
@@ -96,7 +100,7 @@ public class ThreeConeJunctionOnly extends AutoBase {
                 .addTemporalMarker(()->lift.goToMiddle())
                 .lineToLinearHeading(new Pose2d(mediumJunction, 0))
                 .turn(right90)
-                .lineToLinearHeading(new Pose2d(mediumJunctionF, Math.toRadians(-90 * flipOverX)))
+                .lineToLinearHeading(new Pose2d(mediumJunctionF.plus(mediumAdjust), Math.toRadians(-90 * flipOverX)))
 
                 // drop cone
                 .addTemporalMarker(()->intake.open())
