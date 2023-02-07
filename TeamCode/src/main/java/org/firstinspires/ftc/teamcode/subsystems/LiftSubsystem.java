@@ -106,11 +106,19 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public static String[][] characters = {
-            { "  ## ", " ######   ", " #####  ", " #   # ", " #####  "},
-            { " ### ", "      ##  ", "     ## ", " #   # ", " #      "},
-            { "  ## ", "  #####   ", "  ####  ", " ##### ", " #####  "},
-            { "  ## ", " ##       ", "     ## ", "     # ", "     ## "},
-            { "  ## ", " #######  ", " #####  ", "     # ", " #####  "}
+            { "    ##   ", " ######  ", "  #####  ", "  #   #  ", "  #####  "},
+            { "   ###   ", "      ## ", "      ## ", "  #   #  ", "  #      "},
+            { "    ##   ", "  #####  ", "   ####  ", "  #####  ", "  #####  "},
+            { "    ##   ", " ##      ", "      ## ", "      #  ", "      ## "},
+            { "    ##   ", " ####### ", "  #####  ", "      #  ", "  #####  "}
+    };
+
+    public static String[][] stacks = {
+            { "          ", "          ", "          ", "          ", "##########"},
+            { "          ", "          ", "          ", "##########", "##########"},
+            { "          ", "          ", "##########", "##########", "##########"},
+            { "          ", "##########", "##########", "##########", "##########"},
+            { "##########", "##########", "##########", "##########", "##########"}
     };
 
     public static String[] lines(int level){
@@ -119,7 +127,7 @@ public class LiftSubsystem extends SubsystemBase {
         Arrays.fill(lines, "");
 
         for(int row = 0; row < 5; row++){
-            lines[row] += characters[row][level];
+            lines[row] += characters[row][level] + "       " + stacks[row][level];
         }
 
         return lines;
@@ -128,14 +136,17 @@ public class LiftSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        telemetry.addData("currentPosition", currentPosition);
-
         telemetry.setDisplayFormat(Telemetry.DisplayFormat.HTML);
+        telemetry.addLine();
         for (String line : lines(sideCone)) {
             telemetry.addLine("<font face=\"monospace\">" + line.replaceAll("\\s", "&nbsp;") + "</font>");
         }
+        telemetry.addLine();
+        telemetry.addLine();
+        telemetry.addLine();
 
-        telemetry.addData("^^ CONE STACK ^^", sideCone + 1);
+        telemetry.addData("currentPosition", currentPosition);
+        //telemetry.addData("^^ CONE STACK ^^", sideCone + 1);
     }
 }
 
