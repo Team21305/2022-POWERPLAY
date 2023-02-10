@@ -15,6 +15,7 @@ import com.arcrobotics.ftclib.purepursuit.waypoints.StartWaypoint;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.acmerobotics.dashboard.FtcDashboard;
 
+import org.firstinspires.ftc.teamcode.commands.CloseClaw;
 import org.firstinspires.ftc.teamcode.commands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.commands.DriveForward;
 import org.firstinspires.ftc.teamcode.commands.DriveStrafe;
@@ -36,10 +37,13 @@ public class TeleOpMode extends RobotBaseOpMode {
         super.initialize();
 
         downButton.whenPressed(new InstantCommand(()->liftSubsystem.goToBottom()));
-        upButton.whenPressed(new InstantCommand(()->liftSubsystem.goToTop()));
-        middleButton.whenPressed(new InstantCommand(()->liftSubsystem.goToMiddle()));
+        upButton.whenPressed(new InstantCommand(()->liftSubsystem.goToTop(), intakeSubsystem));
+        middleButton.whenPressed(new InstantCommand(()->liftSubsystem.goToMiddle(), intakeSubsystem));
         groundButton.whenPressed(new InstantCommand(()->liftSubsystem.goToGround()));
-        lowButton.whenPressed(new InstantCommand(()->liftSubsystem.goToLow()));
+//        lowButton.whenPressed(new InstantCommand(()->intakeSubsystem.close())
+//                .withTimeout(500)
+//                .andThen( new InstantCommand(()->liftSubsystem.goToLow())));
+        lowButton.whenPressed(new CloseClaw(intakeSubsystem, 400).andThen(new InstantCommand(()->liftSubsystem.goToLow())));
         makyItGoUpy.whenPressed(new InstantCommand(()->liftSubsystem.bumpUp()));
         makyItGoDowny.whenPressed(new InstantCommand(()->liftSubsystem.bumpDown()));
         sideStackUp.whenPressed(new InstantCommand(()->liftSubsystem.sideStackUp()));
